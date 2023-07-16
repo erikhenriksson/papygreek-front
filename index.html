@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>PapyGreek</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.25.0/cytoscape.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/elkjs@0.8.2/lib/elk.bundled.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/cytoscape-elk@2.1.0/dist/cytoscape-elk.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/simple-datatables@7/dist/style.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      href="
+https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css
+"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fast-xml-parser/4.2.4/fxparser.min.js"></script>
+    <script src="/vendor/dom-to-image.min.js"></script>
+    <link
+      href="https://cdn.jsdelivr.net/npm/simple-datatables@7/dist/style.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link rel="stylesheet" href="/static/css/vendor/datatables.css" />
+    <link rel="stylesheet" href="/static/css/vendor/atom-one-light.min.css" />
+    <script>
+      const d = Date.now();
+      document.write(`
+        <link rel="stylesheet" href="/static/css/layout.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/text.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/header.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/textView.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/metadata.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/tree.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/search.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/forms.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/tables.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/components.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/grammar.css?v=${d}" />
+        <link rel="stylesheet" href="/static/css/smyth.css?v=${d}" />
+      `);
+    </script>
+  </head>
+  <body>
+    <header>
+      <nav class="main-nav">
+        <a id="brand" href="/">PapyGreek</a>
+        <a href="/treebanks">Treebanks</a>
+        <a href="/texts">Texts</a>
+        <a href="/people">People</a>
+        <a href="/grammar">Grammar</a>
+        <a href="/search">Search</a>
+        <span id="login-link"></span>
+        <span id="signedin" hidden>
+          <a href="/account" id="username"></a>
+        </span>
+      </nav>
+    </header>
+    <main class="grid">
+      <div class="loader"></div>
+    </main>
+    <div id="error-modal" class="d-none modal">
+      <div class="modal-content">
+        <a href="#" title="Close" class="modal-close"></a>
+        <div class="bold firebrick" style="padding-bottom: 10px">
+          Sorry, an error happened.
+        </div>
+        <div id="error-modal-content"></div>
+      </div>
+    </div>
+    <footer>
+      Produced
+      <script>
+        document.write(new Date().getFullYear());
+      </script>
+      by the PapyGreek
+      <a
+        href="https://www2.helsinki.fi/en/researchgroups/digital-grammar-of-greek-documentary-papyri/people"
+        target="_blank"
+        data-external="1"
+        >team</a
+      >
+    </footer>
+    <script src="/src/q.js"></script>
+    <script src="/src/config.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+    <script>
+      document.write(
+        '<script defer="defer" type="module" src="/src/index.js?v=' +
+          Date.now() +
+          '"><\/script>'
+      );
+    </script>
+  </body>
+</html>

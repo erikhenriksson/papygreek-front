@@ -1,0 +1,107 @@
+th {
+  white-space: nowrap;
+}
+
+td,
+th {
+  padding: 1px !important;
+  line-height: 1.5em;
+}
+
+th {
+  padding-right: 4px !important;
+}
+
+.thh {
+  font-weight: 500;
+}
+
+.datatable-wrapper.no-footer .datatable-container {
+  border-bottom: none;
+}
+
+.datatable-top {
+  padding: 0;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.datatable-bottom {
+  padding: 16px 10px 8px;
+}
+
+.datatable-wrapper {
+  width: 100%;
+  display: none;
+}
+
+.series-datatable td,
+.series-datatable th {
+  width: 33%;
+}
+
+.datatable-sorter::before,
+.datatable-sorter::after {
+  opacity: 0;
+}
+
+.datatable-sorter::before {
+  position: relative;
+  top: 12px;
+  margin-right: 2px;
+}
+
+.datatable-sorter::after {
+  position: relative;
+  top: -9px;
+  margin-left: 10px;
+}
+
+#series_texts th,
+#series_texts td {
+  text-align: center !important;
+}
+
+.datatable-table > thead > tr > th {
+  border: none !important;
+}
+
+.datatable-table th a {
+  padding-bottom: 10px;
+  font-weight: 500;
+}
+
+.datatable-table td {
+  text-align: left;
+  padding: 0 8px !important;
+}
+
+.datatable-top > .datatable-search {
+  float: none !important;
+}
+
+.datatable-input {
+  padding: 5px;
+}
+
+input::-webkit-input-placeholder {
+  text-transform: lowercase !important;
+}
+
+.datatable-pagination .datatable-active a,
+.datatable-pagination .datatable-active a:focus,
+.datatable-pagination .datatable-active a:hover {
+  border-radius: 6px;
+}
+
+.datatable-pagination a:hover {
+  border-radius: 6px;
+}
+
+.datatable-table > tbody > tr > td {
+  word-break: break-all;
+}
+
+td.datatable-empty {
+  color: lightslategray;
+}

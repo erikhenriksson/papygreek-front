@@ -1,0 +1,341 @@
+/* Utils */
+
+.d-none,
+.hidden {
+  display: none !important;
+}
+
+.d-block {
+  display: block !important;
+}
+
+.editable {
+  display: inline-block;
+  cursor: pointer;
+  border: 1px solid silver;
+  margin: 0 2px;
+  padding: 6px;
+  min-width: 100px;
+  border-radius: 6px;
+  font-size: 13px;
+  text-align: left;
+}
+
+/* Messages */
+
+.info {
+  text-align: center;
+  margin-top: 5px;
+  color: lightslategray;
+  font-size: 95%;
+  float: none;
+}
+
+.info-small {
+  font-size: 75%;
+  color: lightslategray;
+}
+
+.datatable-info {
+  text-align: center;
+  margin-top: 5px;
+  color: lightslategray;
+  float: left;
+  margin-left: 10px;
+}
+
+#msg {
+  color: darkred;
+  padding: 16px;
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 500;
+}
+
+/* Button */
+
+.button {
+  color: white;
+  background: linear-gradient(-27deg, #004d4d, teal);
+  border: none;
+  border-radius: 10px;
+  padding: 4px 6px;
+  margin: 0 3px 0 0;
+  font-size: 11px !important;
+  font-variant: small-caps;
+  font-weight: 400;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.button-plain {
+  color: #004d4d;
+  background: none;
+}
+
+.button-small {
+  padding: 0px 6px;
+  line-height: 23px;
+}
+
+.button-warning {
+  background: linear-gradient(-27deg, indianred, chocolate);
+}
+
+.button-muted {
+  background: linear-gradient(-27deg, gray, gray);
+}
+
+.button-del {
+  background: none;
+  color: crimson;
+}
+
+.button-red {
+  background: linear-gradient(-27deg, indianred, chocolate);
+}
+
+.button-green {
+  background: linear-gradient(-27deg, darkgreen, green);
+}
+
+.button-grey {
+  background: none;
+  background: linear-gradient(-27deg, grey, darkgray);
+}
+
+.button.loading {
+  display: none;
+}
+
+.button.loading::after {
+  content: "Wait..";
+  display: block;
+}
+
+/* Card */
+
+.card {
+  width: 75%;
+  margin: 0 auto;
+  overflow: hidden;
+  margin-top: 10px;
+}
+.card-full {
+  width: 100% !important;
+}
+
+.card-content {
+  padding: 10px 20px;
+  background: white;
+}
+.parent-card > .card-content {
+  padding: 8px;
+}
+
+.parent-card > .card-header {
+  border-bottom: none;
+}
+
+.card-header {
+  font-size: 15px;
+  font-weight: 400;
+  text-align: center;
+  padding-bottom: 10px;
+  padding: 10px 20px;
+  margin-bottom: 5px;
+}
+
+.card-title {
+  font-size: 15px;
+}
+
+/* Badge */
+
+.badge-small {
+  color: darkslategrey;
+  background: wheat;
+  border-radius: 3px;
+  padding: 2px 5px 3px;
+  font-size: 11px;
+  border: none;
+  margin: 0 2px;
+  position: relative;
+  top: -1px;
+}
+
+.badge-green,
+.uncertainty-0 {
+  background: seagreen;
+  color: white;
+}
+
+.badge-red {
+  background: indianred;
+  color: white;
+}
+
+.badge-blue {
+  background: lightblue;
+}
+
+.badge-violet {
+  background: blueviolet;
+  color: white;
+}
+
+.badge-orange,
+.uncertainty-1 {
+  background: orange;
+  color: white;
+}
+
+.badge-grey {
+  background: grey;
+  color: white;
+}
+
+/* Loader */
+
+@keyframes spinner {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loader {
+  width: 20px;
+  height: 20px;
+  background: transparent;
+  border-radius: 50%;
+  border: solid 3px transparent;
+  border-left: solid 3px dimgray;
+  display: inline-block;
+  animation-name: fadeIn, spin;
+  animation-duration: 0.3s, 1s;
+  animation-timing-function: linear, linear;
+  animation-iteration-count: 1, infinite;
+}
+@keyframes spin {
+  to {
+    transform: scale(1) rotate(360deg);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  25% {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.loader-small {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border-radius: 50%;
+  border: solid 2px transparent;
+  border-left: solid 2px dimgray;
+  display: inline-block;
+  animation-name: spin;
+  animation-duration: 0.8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+.loader-white-small {
+  width: 12px;
+  height: 12px;
+  background: transparent;
+  border-radius: 50%;
+  border: solid 2px transparent;
+  border-left: solid 2px white;
+  display: inline-block;
+  animation-name: spin;
+  animation-duration: 0.8s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+}
+
+/* Modal */
+
+.modal {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.2);
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 999;
+  transition: all 0.3s;
+}
+
+.modal > div {
+  max-width: 768px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  padding: 2em;
+  background: white;
+  border-radius: 4px;
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.3);
+  max-height: 80%;
+  overflow-y: scroll;
+}
+
+.modal header {
+  font-weight: 500;
+}
+
+.modal h1 {
+  font-size: 150%;
+  margin: 0 0 15px;
+}
+
+.modal-close {
+  text-align: center;
+  cursor: pointer;
+  width: 30px;
+  font-size: 80%;
+  line-height: 30px;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.modal-close:after {
+  content: "✕";
+}
+
+/* Tabs */
+
+.tabs {
+  text-align: center;
+}
+
+.tabs a {
+  position: relative;
+  display: inline-block;
+  padding: 15px 15px 10px;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 95%;
+  color: black;
+}
+
+.tabs a.active:after {
+  height: 3px;
+  top: 3px;
+  width: 100%;
+  content: "";
+  background: linear-gradient(to right, firebrick, indianred) 1px;
+  display: block;
+  left: -2px;
+  padding: 0 2px;
+  position: relative;
+  border-radius: 23px;
+}

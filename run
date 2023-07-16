@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ $1 == "dev" ]; then
+	suffix=".local"
+	config="config.dev.js"
+	params="--watch --outdir ./dist.local -sourcemap"
+	
+elif [ $1 == "build" ]; then
+	suffix=""
+	config="config.js"
+	params="--outdir ./dist"
+else
+	echo "dev | build"
+	exit
+fi
+
+rm -rf dist${suffix}
+mkdir -p dist${suffix}
+mkdir -p dist${suffix}/src
+mkdir -p dist${suffix}/static/css
+mkdir -p dist${suffix}/static/css/vendor
+mkdir -p dist${suffix}/static/img
+mkdir -p dist${suffix}/static/fonts
+mkdir -p dist${suffix}/vendor
+cp index.html dist${suffix}
+cp robots.txt dist${suffix} 2>/dev/null || :
+cp src/css/*.css  dist${suffix}/static/css
+cp src/css/vendor/*.css  dist${suffix}/static/css/vendor
+cp src/img/*.{jpg,png} dist${suffix}/static/img
+cp src/fonts/* dist${suffix}/static/fonts
+cp src/vendor/* dist${suffix}/vendor
+tsc ${params}
+cp ${config} dist${suffix}/src/config.js

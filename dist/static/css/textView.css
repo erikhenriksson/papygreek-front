@@ -1,0 +1,282 @@
+/* Tab: Arethusa */
+
+iframe#arethusa {
+  border: none;
+  width: 100%;
+  height: 700px;
+}
+
+#arethusa.full {
+  position: fixed;
+  left: 0px;
+  top: 30px;
+  height: 100%;
+}
+
+/* Tab: Text */
+
+.line-margin {
+  width: 60px;
+  display: inline-block;
+  background: #fff;
+  color: #777;
+  margin-left: -60px;
+}
+
+.token {
+  padding: 2px 4px;
+  display: inline-block;
+  position: relative;
+}
+
+.token span {
+  display: block;
+  float: none;
+  clear: both;
+}
+
+.sentence:nth-child(even):hover .token {
+  background: linen;
+}
+.sentence:nth-child(odd):hover .token {
+  background: linen;
+}
+
+.token {
+  position: relative;
+}
+
+.token:hover .token-reg {
+  display: inline;
+}
+.token:hover .token-orig {
+  display: none;
+}
+
+.token .token-reg {
+  display: none;
+  color: green;
+}
+
+.token .token-orig {
+  color: red;
+}
+
+.token:hover {
+  text-decoration: underline;
+}
+
+.tooltip table {
+  border-collapse: collapse;
+}
+
+/* Tooltip text */
+.tooltip {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+
+  visibility: hidden;
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.3);
+  padding: 5px 0;
+  border-radius: 6px;
+  position: absolute;
+  z-index: 1;
+  bottom: 135%;
+  left: 65%;
+  font-size: 75%;
+  padding: 10px;
+}
+
+.tooltip td,
+.tooltip th {
+  min-width: 75px;
+  line-height: 1.3em;
+}
+
+.tooltip th {
+  padding-bottom: 3px;
+}
+.tooltip td {
+  padding-right: 6px !important;
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.token:hover .tooltip {
+  visibility: visible;
+}
+
+/* XML VIEW */
+
+textarea.xml {
+  width: 100%;
+  border: 0;
+}
+
+.hljs {
+  font-size: 15px;
+  color: black;
+}
+
+.hljs > * {
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.card-content.diff {
+  font-size: 0;
+}
+.card-content.diff * {
+  font-size: 11px;
+}
+
+.diff .removed {
+  background: red;
+  color: white;
+}
+.diff .removed.spacer {
+  color: white;
+  background: red;
+  display: inline-block;
+  min-width: 8px;
+  min-height: 1.15em;
+  position: relative;
+  top: 3px;
+}
+.diff .added {
+  background: green;
+  color: white;
+}
+.diff .unchanged {
+  color: blue;
+}
+
+xmp {
+  white-space: pre-wrap;
+  display: inline;
+}
+
+/* Editor */
+
+table#editor,
+table.metadata {
+  table-layout: fixed;
+  width: 100%;
+  font-size: 11px !important;
+}
+
+table#editor th:nth-child(3),
+table#editor th:nth-child(8) {
+  width: 7% !important;
+}
+
+table#editor th:nth-child(4),
+table#editor th:nth-child(9) {
+  width: 6% !important;
+}
+
+table#editor th:nth-child(5),
+table#editor th:nth-child(10) {
+  width: 5% !important;
+}
+
+table#editor th:nth-child(11) {
+  width: 2% !important;
+}
+
+table#editor th:nth-child(12) {
+  width: 8% !important;
+}
+table#editor th:nth-child(13) {
+  width: 7% !important;
+}
+table#editor th:nth-child(14) {
+  width: 1% !important;
+}
+
+table#editor .layer-row th {
+  font-size: 13px;
+  line-height: 34px;
+  color: darkslategray;
+}
+
+table#editor .delete td {
+  text-decoration: line-through;
+  color: red;
+}
+
+table#editor td:nth-child(2),
+table#editor td:nth-child(3),
+table#editor td:nth-child(4),
+table#editor td:nth-child(5) {
+  background: aliceblue;
+}
+
+table#editor td:nth-child(7),
+table#editor td:nth-child(8),
+table#editor td:nth-child(9),
+table#editor td:nth-child(10) {
+  background: lavenderblush;
+}
+
+table#editor td:nth-child(1),
+table#editor td:nth-child(6),
+table#editor td:nth-child(11),
+table#editor td:nth-child(12),
+table#editor td:nth-child(13) {
+  background: snow;
+}
+
+table#editor td.different {
+  box-shadow: inset 0 0 30px rgba(0, 0, 0, 0.2);
+}
+
+.delete-artificial {
+  cursor: pointer;
+}
+
+.new-artificial {
+  background: lightgreen;
+}
+
+.token-editable.modified {
+  color: darkmagenta;
+  border: 1px solid black;
+}
+
+.token-editable.modified:empty {
+  color: darkmagenta;
+  border: 1px solid black;
+}
+
+.import-xml:empty:not(:focus):before {
+  content: attr(data-placeholder);
+  font-size: 12px;
+  text-align: center;
+  display: inline-block;
+  color: grey;
+  width: 100%;
+}
+
+table.metadata th,
+table.metadata td {
+  text-align: center;
+  vertical-align: top;
+}
+
+.metadata-card {
+  border: 1px solid silver;
+  border-radius: 4px;
+}
+
+.metadata-card .card-title {
+  border-bottom: 2px solid grey;
+  width: 15%;
+  padding-bottom: 4px;
+  margin: 0 auto;
+}
+
+.text-type-items {
+  margin: 10px 0;
+}

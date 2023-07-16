@@ -1,0 +1,28 @@
+#brand {
+  margin-right: 60px;
+  font-size: 24px;
+  color: darkslategrey;
+}
+
+#login-link:empty {
+  display: none;
+}
+
+#login-link {
+  max-height: 20px;
+  overflow: hidden;
+}
+
+#login-link,
+#signedin {
+  margin-left: auto;
+  margin-right: 20px;
+}
+
+a#username {
+  margin-right: 0;
+}
+
+.logout {
+  cursor: pointer;
+}

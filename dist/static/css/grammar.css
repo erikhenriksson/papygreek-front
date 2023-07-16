@@ -1,0 +1,114 @@
+#chapter h1,
+#chapter h2,
+#chapter h3,
+#chapter h4,
+#chapter h5 {
+  text-align: left !important;
+  margin-bottom: 10px;
+}
+
+#chapter ul:not(.tf-result *) {
+  margin: 14px 0;
+}
+
+#refs:before {
+  content: "References";
+  display: block;
+  font-weight: 500;
+  font-size: 15px;
+  margin-top: 33px;
+  margin-bottom: 7px;
+}
+
+#menu a {
+  color: dimgrey;
+}
+
+#menu .current a {
+  color: black;
+  font-weight: 500;
+}
+
+#refs {
+  text-indent: -30px;
+  margin-left: 30px;
+}
+
+.csl-entry {
+  padding-bottom: 4px;
+}
+
+#chapter-add {
+  border: 1px solid silver;
+}
+
+.chapter-edit:empty {
+  min-height: 30px;
+  border: 1px dotted silver;
+  border-radius: 3px;
+}
+
+.md-edit {
+  position: relative;
+  top: 6px;
+}
+
+#chapter-number {
+  border: 1px solid lightgrey;
+  border-radius: 6px;
+  padding: 1px 3px;
+  font-size: 12px;
+  width: 40px;
+}
+
+#main-bibliography > p {
+  display: none;
+}
+
+#main-bibliography #refs:before {
+  display: none;
+}
+
+.chapter-link {
+  cursor: pointer;
+}
+
+.sentence-tree {
+  position: relative;
+  border: 1px solid silver;
+  border-radius: 5px;
+}
+
+.sentence-tree.enlarged {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 75%;
+  height: 75% !important;
+  background: #fff;
+  box-shadow: 0 0 1000px rgba(0, 0, 0, 0.5);
+}
+
+.enlarge-button {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  z-index: 100;
+  width: 15px;
+  font-size: 19px;
+  display: block;
+  color: #555;
+  height: 15px;
+  cursor: pointer;
+}
+
+.enlarge-button.maximize:after {
+  content: "⇱";
+  display: "block";
+}
+
+.enlarge-button.minimize:after {
+  content: "⇲";
+  display: "block";
+}

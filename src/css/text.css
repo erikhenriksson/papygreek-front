@@ -1,0 +1,145 @@
+@font-face {
+  font-family: "zephtext";
+  src: url("/static/fonts/zephtext.ttf");
+  unicode-range: U+0370-03FF, U+1F00-1FFF;
+  font-size: 125%;
+}
+
+* {
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  font-family: "zephtext", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.66em;
+  color: black;
+  text-align: left;
+}
+
+p {
+  line-height: 1.5em;
+  margin-top: 0;
+}
+
+h1,
+h2 {
+  font-weight: 300;
+  grid-column: span 14;
+  line-height: 1.2em;
+  margin: 0;
+  text-align: center;
+}
+
+h1 + h2 {
+  margin: 10px 0;
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+
+h1:first-child,
+h2:first-child,
+h3:first-child,
+h4:first-child {
+  margin-top: 0;
+}
+
+h2 {
+  font-size: 1.5em;
+}
+
+h3,
+h4 {
+  margin: 0.8em 0 0.7em 0;
+  font-weight: 400;
+}
+
+a {
+  color: firebrick;
+  text-decoration: none;
+}
+
+header nav a {
+  margin-right: 36px;
+  text-decoration: none;
+  color: dimgray;
+}
+
+footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: dimgray;
+}
+
+.small-caps {
+  font-variant: small-caps;
+}
+
+.centered {
+  text-align: center;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.tight {
+  padding: 0;
+  margin: 0;
+}
+
+code {
+  font-size: 12px;
+}
+
+.xml,
+.diff {
+  font-family: monospace;
+  line-height: 12px;
+}
+
+.bold {
+  font-weight: 600 !important;
+}
+
+.semi-bold {
+  font-weight: 400;
+}
+
+.firebrick,
+.red {
+  color: firebrick;
+}
+
+.orangered,
+.orange {
+  color: orangered;
+}
+
+.darkgreen,
+.green {
+  color: darkgreen;
+}
+
+.token {
+  font-size: 1.1em;
+  line-height: 1.4em;
+}
+
+*[contenteditable] {
+  cursor: pointer;
+}
+
+.sym {
+  font-family: "Arial unicode ms";
+}
+
+.smaller {
+  font-size: 85% !important;
+}

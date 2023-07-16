@@ -1,0 +1,58 @@
+#aow {
+  border: 1px solid grey;
+  border-radius: 4px;
+  margin-bottom: 10px;
+}
+
+.metadata td:empty {
+  height: 20px;
+}
+.metadata td:empty:after {
+  content: "[empty]";
+  color: silver;
+}
+
+.aow-personname a:empty:after,
+#new-person-name:empty:after {
+  content: "[Anonymous]";
+  color: slategray;
+}
+
+.aow-person-item {
+  position: relative;
+}
+
+.aow-person-role-select.select select {
+  font-weight: 500;
+}
+
+.edit-aow-person:hover {
+  cursor: pointer;
+}
+
+.edit-aow-person-certainty {
+  cursor: pointer;
+}
+
+.uncertainty-0:after,
+.uncertainty-null:after {
+  content: "✓";
+}
+
+.uncertainty-1:after {
+  content: "?";
+}
+
+h1#person-name:empty:after {
+  content: "[Anonymous]";
+  color: slategray;
+}
+
+#person-tmid .value:empty:after,
+.aow-person-tmid:empty:after {
+  content: "[Not set]";
+}
+
+.text-type-select-div {
+  margin-top: 6px;
+}

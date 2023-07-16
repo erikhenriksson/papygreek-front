@@ -1,0 +1,100 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color: #213547;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  border-collapse: collapse;
+}
+
+body {
+  max-width: 1000px;
+  min-width: 768px;
+  padding: 0 20px;
+  margin: 0 auto;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-gap: 20px;
+}
+
+.grid-11 {
+  display: grid;
+  grid-template-columns: repeat(11, 1fr);
+  grid-gap: 20px;
+  justify-items: center;
+}
+
+.g-12 {
+  grid-column: span 12;
+}
+.g-14 {
+  grid-column: span 14;
+}
+.g-8 {
+  grid-column: span 8;
+}
+
+.g-4 {
+  grid-column: span 4;
+}
+.g-3 {
+  grid-column: span 3;
+}
+.g-2 {
+  grid-column: span 2;
+}
+.g-1 {
+  grid-column: span 1;
+}
+
+.g-6 {
+  grid-column: span 6;
+}
+
+header {
+  margin: 30px 0 25px;
+}
+
+section {
+  position: relative;
+  grid-column: span 14;
+}
+
+nav {
+  display: flex;
+}
+
+aside {
+  grid-column: span 3;
+}
+
+aside + section {
+  grid-column: 4 / span 12;
+}
+
+section + aside {
+  grid-column: 9 / span 4;
+}
+
+.loner {
+  margin: 40px 0;
+  text-align: center;
+  font-size: 20px;
+}
+
+footer {
+  margin: 40px 0;
+}

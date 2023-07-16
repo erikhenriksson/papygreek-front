@@ -1,0 +1,231 @@
+#smyth-main blockquote.quote {
+  display: inline;
+  margin: 0;
+}
+
+#smyth-main blockquote.quote p {
+  margin: 0;
+  display: inline;
+}
+
+#smyth-main div.citquote {
+  display: inline;
+}
+
+#smyth-main div.citbibl {
+  display: inline;
+  font-size: 100% !important;
+  text-align: left !important;
+  margin-right: -0.25em;
+}
+
+#smyth-main table {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-collapse: collapse;
+  margin: 20px 0;
+  width: 100%;
+}
+
+#smyth-main td {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+  padding: 2px 6px !important;
+}
+
+#smyth-main .foreign {
+  font-size: 110%;
+  color: darkslategrey;
+}
+#smyth-main .term,
+#smyth-main .gloss,
+#smyth-main i {
+  color: darkcyan;
+  font-style: italic;
+  font-weight: 500;
+}
+
+#smyth-main .gloss {
+  display: inline;
+  /*color:midnightblue;*/
+}
+/*
+#smyth-main .gloss:before {
+    content:'“'
+}
+
+#smyth-main .gloss:after {
+    content:'”'
+}
+*/
+#smyth-main h1 {
+  font-size: 2em;
+  text-align: left;
+  margin-bottom: 0.8em;
+}
+
+#smyth-main .section:after {
+  content: "፨";
+  display: block;
+  width: 100%;
+  font-size: 150%;
+  margin: 1.2em 0 1em;
+  height: 20px;
+  text-align: center;
+}
+
+#smyth-main .section:last-child:after {
+  display: none;
+}
+
+#smyth-main h4:first-child {
+  margin-top: 0.8em;
+  padding-top: 0.5em;
+}
+
+#smyth-menu a.current {
+  color: black;
+  font-weight: 500;
+}
+
+#smyth-main b {
+  font-weight: 500;
+}
+#smyth-main h5,
+#smyth-main h6,
+#smyth-main h7 {
+  margin: 0.8em 0 0.7em;
+}
+
+#smyth-main h3,
+#smyth-main h4,
+#smyth-main h5 {
+  font-weight: 500;
+}
+
+#smyth-menu h2 {
+  text-align: left;
+}
+
+#smyth-main p.right {
+  display: none;
+}
+
+#smyth-menu ul,
+#smyth-menu li {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+#smyth-menu {
+  height: 60vh;
+  overflow-y: scroll;
+}
+
+#smyth-menu {
+  -ms-overflow-style: none; /* Internet Explorer 10+ */
+  scrollbar-width: none; /* Firefox */
+}
+#smyth-menu::-webkit-scrollbar {
+  display: none; /* Safari and Chrome */
+}
+
+#smyth-sticky {
+  position: fixed;
+  width: 310px;
+}
+
+#smyth-menu {
+  padding-bottom: 150px;
+}
+
+#smyth-menu ul ul {
+  margin-left: 20px;
+}
+#smyth-menu ul ul ul ul {
+  display: none;
+}
+#smyth-menu a {
+  color: dimgrey;
+}
+#smyth-main {
+  min-height: 75vh;
+}
+#smyth-main .center h1 {
+  text-align: center !important;
+}
+
+#smyth-overlay {
+  position: absolute;
+  height: 60vh;
+  background-image: linear-gradient(
+    rgba(255, 255, 255, 0) 75%,
+    rgba(255, 255, 255, 1) 101%
+  );
+  width: 100%;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+}
+
+/*
+
+#smyth-menu > ul > li {
+    background: antiquewhite;
+    border: none;
+    border-radius: 3px;
+    margin: 0 2px;
+    padding: 2px 5px 3px;
+}
+
+#smyth-menu > ul > li:nth-child(1) {
+    background: linen;
+}
+
+#smyth-menu > ul > li:nth-child(2) {
+    background: lightblue;
+}
+
+#smyth-menu > ul > li:nth-child(3) {
+    background: lavender;
+}
+
+#smyth-menu > ul > li:nth-child(4) {
+    background: mistyrose;
+}
+
+#smyth-menu > ul > li > ul > li  {
+    color: #2f4f4f;
+    background: wheat;
+    border: none;
+    border-radius: 3px;
+    margin: 0 2px;
+    padding: 2px 5px 3px;
+    position: relative;
+    top:-1px;
+}
+
+*/
+
+#smyth-footer {
+  margin-top: 25px;
+}
+
+#smyth-main h2,
+#smyth-main h3,
+#smyth-main h4,
+#smyth-main h5,
+#smyth-main h6,
+#smyth-main h7 {
+  text-align: center;
+  color: darkslategray;
+  font-weight: 600;
+}
+
+#smyth-main h1 {
+  text-align: center;
+}
+
+#smyth-main .toc {
+  list-style-type: none;
+}
