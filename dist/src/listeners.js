@@ -12,6 +12,7 @@ import { listeners as textEditorListeners } from "./views/text/editor.js";
 import { listeners as textMetadataListeners } from "./views/text/metadata.js";
 import { listeners as textWorkflowListeners } from "./views/text/workflow.js";
 import { listeners as textXmlListeners } from "./views/text/xml.js";
+import { listeners as textViewListeners } from "./views/text/view.js";
 let listeners = {};
 let viewListeners = [
     accountListeners,
@@ -26,6 +27,7 @@ let viewListeners = [
     textMetadataListeners,
     textWorkflowListeners,
     textXmlListeners,
+    textViewListeners,
 ].flat();
 for (let listener of viewListeners) {
     for (let k in listener) {

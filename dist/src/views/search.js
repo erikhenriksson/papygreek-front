@@ -564,7 +564,7 @@ export default (params) => {
         })
             .join("")}
           </select></div>
-          <span style="margin-left:10px;" class="semi-bold">Status </span>
+          <span style="margin-left:10px;" class="semi-bold">Status: </span>
           <input checked="" type="radio" id="text-status-" name="text-status" value="">
           <label for="text-status-">Any</label>
           <input type="radio" id="text-status-0" name="text-status" value="0">
@@ -586,7 +586,7 @@ export default (params) => {
         })
             .join("")}
           </select></div>
-          <span style="margin-left:10px;" class="semi-bold">Certainty </span>
+          <span style="margin-left:10px;" class="semi-bold">Certainty: </span>
           <input checked="" type="radio" id="person-certainty-" name="person-certainty" value="">
           <label for="person-certainty-">Any</label>
           <input type="radio" id="person-certainty-0" name="person-certainty" value="0">

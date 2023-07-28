@@ -29,7 +29,7 @@ iframe#arethusa {
   position: relative;
 }
 
-.token span {
+.token span.token-var {
   display: block;
   float: none;
   clear: both;
@@ -47,14 +47,14 @@ iframe#arethusa {
 }
 
 .token:hover .token-reg {
-  display: inline;
+  display: inline !important;
 }
 .token:hover .token-orig {
   display: none;
 }
 
 .token .token-reg {
-  display: none;
+  display: none !important;
   color: green;
 }
 
@@ -279,4 +279,537 @@ table.metadata td {
 
 .text-type-items {
   margin: 10px 0;
+}
+
+.formatted-tokens {
+  padding-left: 60px;
+  display: inline-block;
+  text-align: left;
+}
+
+.formatted-html {
+  padding-left: 60px;
+  display: inline-block;
+  text-align: left;
+}
+
+/* Bracket to HTML system */
+
+span.line-gap {
+  width: 100%;
+}
+
+span[data-att] {
+  text-align: center;
+}
+
+/* Unclears */
+
+span[data-att-cert],
+span[data-att-precision],
+span[data-tag="unclear"] {
+  background: none;
+  background-image: linear-gradient(
+    45deg,
+    lightgray 18.75%,
+    #fff 18.75%,
+    #fff 50%,
+    lightgray 50%,
+    lightgray 68.75%,
+    #fff 68.75%,
+    #fff 100%
+  );
+  background-size: 6px 6px;
+}
+
+/* Tag: del */
+
+span[data-tag="del"] {
+  text-decoration: line-through;
+}
+
+/* Tag: supplied and abbr */
+
+span[data-tag="supplied"],
+span[data-tag="ex"],
+span[data-tag="abbr"] {
+  color: royalblue;
+  padding: 0px 1px;
+}
+
+span[data-att-reason="lost"] {
+  background: gainsboro;
+}
+
+/* Tag: surplus */
+
+span[data-tag="surplus"] {
+  color: firebrick;
+  text-decoration: line-through;
+}
+
+/* Tag: add */
+
+span[data-tag="add"][data-att-place="above"] {
+  top: -5px;
+  position: relative;
+  font-size: 12px !important;
+}
+
+span[data-tag="add"][data-att-place="below"] {
+  top: 5px;
+  position: relative;
+  font-size: 12px !important;
+}
+
+span[data-tag="add"][data-att-place="left"]::before {
+  content: "←";
+  color: brown;
+}
+
+span[data-tag="add"][data-att-place="right"]::before {
+  content: "→";
+  color: brown;
+}
+
+span[data-tag="add"][data-att-place="margin"]::before {
+  content: "↕";
+  color: brown;
+}
+
+span[data-tag="add"][data-att-place="interlinear"]::before {
+  content: "↕";
+  color: brown;
+}
+
+span[data-tag="add"][data-att-place="margin"]::before {
+  content: "←|";
+  color: brown;
+}
+
+span[data-tag="add"][data-att-place="margin"][data-att-rend="underline"] {
+  border-bottom: 1px solid;
+}
+
+/* Tag: hi */
+
+span[data-tag="hi"][data-att-rend="supraline"] {
+  border-top: 1px solid;
+}
+
+span[data-tag="hi"][data-att-rend="underline"],
+span[data-tag="hi"][data-att-rend="underlined"] {
+  border-bottom: 1px solid;
+}
+
+span[data-tag="hi"][data-att-rend="supraline-underline"] {
+  border-top: 1px solid;
+  border-bottom: 1px solid;
+}
+
+span[data-tag="hi"][data-att-rend="tall"] {
+  font-size: 20px !important;
+}
+
+span[data-tag="hi"][data-att-rend="superscript"],
+span[data-tag="hi"][data-att-rend="above"] {
+  font-size: 11px !important;
+  top: -5px;
+  position: relative;
+}
+
+span[data-tag="hi"][data-att-rend="subscript"],
+span[data-tag="hi"][data-att-rend="below"] {
+  font-size: 11px !important;
+  top: 5px;
+  position: relative;
+}
+
+span[data-tag="hi"][data-att-rend="diaeresis"]::after {
+  content: "¨";
+  color: brown;
+}
+
+span[data-tag="hi"][data-att-rend="acute"]::after {
+  content: "´";
+  color: brown;
+}
+
+span[data-tag="hi"][data-att-rend="asper"]::after {
+  content: "῾";
+  color: brown;
+}
+
+span[data-tag="hi"][data-att-rend="grave"]::after {
+  content: "`";
+  color: brown;
+}
+
+span[data-tag="hi"][data-att-rend="circumflex"]::after {
+  content: "^";
+  color: brown;
+}
+
+span[data-tag="hi"][data-att-rend="lenis"]::after {
+  content: "᾿";
+  color: brown;
+}
+
+/* Tag: lb */
+
+span[data-tag="lb"]::before {
+  content: "";
+  border-left: 2px dotted black;
+  margin: 0 1px;
+}
+
+/* Tag: q */
+
+span[data-tag="q"]::before {
+  content: "“";
+}
+
+span[data-tag="q"]::after {
+  content: "”";
+}
+
+/* Tag: g */
+
+span[data-tag="g"]::after {
+  content: attr(data-att-type);
+  color: brown;
+}
+
+span[data-tag="g"][data-att-type="slanting-stroke"]::after {
+  content: "╱";
+}
+
+span[data-tag="g"][data-att-type="extension"]::after {
+  content: "—";
+}
+
+span[data-tag="g"][data-att-type="apostrophe"]::after {
+  content: "⸍";
+}
+
+span[data-tag="g"][data-att-type="stauros"]::after {
+  content: "†";
+}
+
+span[data-tag="g"][data-att-type="rho-cross"]::after {
+  content: "⳨";
+}
+
+span[data-tag="g"][data-att-type="chirho"]::after {
+  content: "☧";
+}
+
+span[data-tag="g"][data-att-type="check"]::after {
+  content: "✓";
+}
+
+span[data-tag="g"][data-att-type="middot"]::after {
+  content: "‧";
+}
+
+span[data-tag="g"][data-att-type="dipunct"]::after {
+  content: "∶";
+}
+
+span[data-tag="g"][data-att-type="long-vertical-bar"]::after {
+  content: "｜";
+}
+
+span[data-tag="g"][data-att-type="diastole"]::after {
+  content: "⸒";
+}
+
+span[data-tag="g"][data-att-type="dot"]::after {
+  content: "•";
+}
+
+span[data-tag="g"][data-att-type="unintelligible"]::after {
+  content: "?";
+}
+
+span[data-tag="g"][data-att-type="parens-punctuation-opening"]::after {
+  content: "(";
+}
+
+span[data-tag="g"][data-att-type="parens-punctuation-closing"]::after {
+  content: ")";
+}
+
+span[data-tag="g"][data-att-type="filler"]::after {
+  content: "―";
+}
+
+/* Tag: milestone */
+
+span[data-tag="milestone"]::after {
+  content: attr(data-att-rend);
+  color: brown;
+}
+
+span[data-tag="milestone"][data-att-rend="coronis"]::after {
+  content: "⸎";
+}
+
+span[data-tag="milestone"][data-att-rend="paragraphos"]::after {
+  content: "––––––";
+}
+
+span[data-tag="milestone"][data-att-rend="horizontal-rule"]::after {
+  content: "––––––––––––";
+}
+
+span[data-tag="milestone"][data-att-rend="diple-obelismene"]::after {
+  content: ">–––––";
+}
+
+span[data-tag="milestone"][data-att-rend="wavy-line"]::after {
+  content: "~~~~~~~~";
+}
+
+/* Tag: num */
+
+span[data-tag="num"] {
+  color: brown;
+}
+
+span[data-tag="num"]:after {
+  content: attr(data-att-value);
+  font-family: sans-serif;
+  font-size: 11px;
+  margin-left: 3px;
+  background: bisque;
+  border-radius: 30px;
+  color: #555;
+  padding: 1px 5px;
+}
+
+/* Tag: gap and space */
+
+span[data-tag="gap"]:after,
+span[data-tag="space"]:after {
+  content: "\a0";
+  font-variant: small-caps;
+  min-width: 20px;
+  width: 20px;
+  text-align: center;
+  display: inline-block;
+  background: lightgray;
+}
+
+span[data-tag="space"]:after {
+  background: linen;
+}
+
+span[data-att-quantity]:after {
+  width: 31em; /* The max width */
+}
+
+span[data-att-quantity="1"]:after,
+span[data-att-atLeast="1"]:after {
+  width: 1em;
+}
+span[data-att-quantity="2"]:after,
+span[data-att-atLeast="2"]:after {
+  width: 2em;
+}
+span[data-att-quantity="3"]:after,
+span[data-att-atLeast="3"]:after {
+  width: 3em;
+}
+span[data-att-quantity="4"]:after,
+span[data-att-atLeast="4"]:after {
+  width: 4em;
+}
+span[data-att-quantity="5"]:after,
+span[data-att-atLeast="5"]:after {
+  width: 5em;
+}
+span[data-att-quantity="6"]:after,
+span[data-att-atLeast="6"]:after {
+  width: 6em;
+}
+span[data-att-quantity="7"]:after,
+span[data-att-atLeast="7"]:after {
+  width: 7em;
+}
+span[data-att-quantity="8"]:after,
+span[data-att-atLeast="8"]:after {
+  width: 8em;
+}
+span[data-att-quantity="9"]:after,
+span[data-att-atLeast="9"]:after {
+  width: 9em;
+}
+span[data-att-quantity="10"]:after,
+span[data-att-atLeast="10"]:after {
+  width: 10em;
+}
+
+span[data-att-quantity="11"]:after,
+span[data-att-atLeast="11"]:after {
+  width: 11em;
+}
+span[data-att-quantity="12"]:after,
+span[data-att-atLeast="12"]:after {
+  width: 12em;
+}
+span[data-att-quantity="13"]:after,
+span[data-att-atLeast="13"]:after {
+  width: 13em;
+}
+span[data-att-quantity="14"]:after,
+span[data-att-atLeast="14"]:after {
+  width: 14em;
+}
+span[data-att-quantity="15"]:after,
+span[data-att-atLeast="15"]:after {
+  width: 15em;
+}
+span[data-att-quantity="16"]:after,
+span[data-att-atLeast="16"]:after {
+  width: 16em;
+}
+span[data-att-quantity="17"]:after,
+span[data-att-atLeast="17"]:after {
+  width: 17em;
+}
+span[data-att-quantity="18"]:after,
+span[data-att-atLeast="18"]:after {
+  width: 18em;
+}
+span[data-att-quantity="19"]:after,
+span[data-att-atLeast="19"]:after {
+  width: 19em;
+}
+span[data-att-quantity="20"]:after,
+span[data-att-atLeast="20"]:after {
+  width: 20em;
+}
+
+span[data-att-quantity="21"]:after,
+span[data-att-atLeast="21"]:after {
+  width: 21em;
+}
+span[data-att-quantity="22"]:after,
+span[data-att-atLeast="22"]:after {
+  width: 22em;
+}
+span[data-att-quantity="23"]:after,
+span[data-att-atLeast="23"]:after {
+  width: 23em;
+}
+span[data-att-quantity="24"]:after,
+span[data-att-atLeast="24"]:after {
+  width: 24em;
+}
+span[data-att-quantity="25"]:after,
+span[data-att-atLeast="25"]:after {
+  width: 25em;
+}
+span[data-att-quantity="26"]:after,
+span[data-att-atLeast="26"]:after {
+  width: 26em;
+}
+span[data-att-quantity="27"]:after,
+span[data-att-atLeast="27"]:after {
+  width: 27em;
+}
+span[data-att-quantity="28"]:after,
+span[data-att-atLeast="28"]:after {
+  width: 28em;
+}
+span[data-att-quantity="29"]:after,
+span[data-att-atLeast="29"]:after {
+  width: 29em;
+}
+span[data-att-quantity="30"]:after,
+span[data-att-atLeast="30"]:after {
+  width: 30em;
+}
+
+span[data-att-atLeast][data-att-atMost]:after {
+  content: attr(data-att-atLeast) "-" attr(data-att-atMost);
+}
+
+span[data-tag="gap"][data-att-reason="illegible"]:after,
+span[data-tag="space"][data-att-reason="illegible"]:after {
+  background: none;
+  background-image: linear-gradient(
+    45deg,
+    lightgray 18.75%,
+    #fff 18.75%,
+    #fff 50%,
+    lightgray 50%,
+    lightgray 68.75%,
+    #fff 68.75%,
+    #fff 100%
+  );
+  background-size: 6px 6px;
+}
+
+span[data-att-unit="line"]:after {
+  content: "\a0";
+  white-space: pre;
+  clear: both;
+  width: 100%;
+}
+
+span[data-att-unit="line"][data-att-quantity]::after,
+span[data-att-unit="line"][data-att-atLeast]::after {
+  height: 210px;
+}
+
+span[data-att-unit="line"][data-att-quantity="1"]::after,
+span[data-att-unit="line"][data-att-atLeast="1"]::after {
+  height: 21px;
+}
+
+span[data-att-unit="line"][data-att-quantity="2"]::after,
+span[data-att-unit="line"][data-att-atLeast="2"]::after {
+  height: 42px;
+}
+
+span[data-att-unit="line"][data-att-quantity="3"]::after,
+span[data-att-unit="line"][data-att-atLeast="3"]::after {
+  height: 63px;
+}
+
+span[data-att-unit="line"][data-att-quantity="4"]::after,
+span[data-att-unit="line"][data-att-atLeast="4"]::after {
+  height: 84px;
+}
+
+span[data-att-unit="line"][data-att-quantity="5"]::after,
+span[data-att-unit="line"][data-att-atLeast="5"]::after {
+  height: 105px;
+}
+
+span[data-att-unit="line"][data-att-quantity="6"]::after,
+span[data-att-unit="line"][data-att-atLeast="6"]::after {
+  height: 126px;
+}
+
+span[data-att-unit="line"][data-att-quantity="7"]::after,
+span[data-att-unit="line"][data-att-atLeast="7"]::after {
+  height: 147px;
+}
+
+span[data-att-unit="line"][data-att-quantity="8"]::after,
+span[data-att-unit="line"][data-att-atLeast="8"]::after {
+  height: 168px;
+}
+
+span[data-att-unit="line"][data-att-quantity="9"]::after,
+span[data-att-unit="line"][data-att-atLeast="9"]::after {
+  height: 189px;
+}
+
+span[data-att-unit="line"][data-att-quantity="10"]::after,
+span[data-att-unit="line"][data-att-atLeast="10"]::after {
+  height: 210px;
 }
