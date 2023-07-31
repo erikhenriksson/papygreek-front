@@ -45,7 +45,7 @@ input[type="radio"] + label {
   border: 1px solid white;
 }
 input[type="radio"]:checked + label {
-  background: gainsboro;
+  background: linear-gradient(-27deg, gainsboro, rgb(230, 230, 230));
   border: 1px solid lightgray;
 }
 

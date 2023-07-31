@@ -249,11 +249,17 @@ export const listeners: Listeners = {
               info.innerHTML = `${resultData.length} tokens. (Upper limit for tabulation is 10000.)`;
             } else {
               let result = resultData.map((item: Dict<string>) => {
+                console.log(item);
                 return [
                   `<a data-link-newtab href="/text/${item.text_id}" target="_blank">${item.name}</a>`,
                   `<span data-sentencen="${item.sentence_n}" data-textid="${item.text_id}" data-layer="${layer}" data-tokenid="${item.id}" class="show-tree button button-plain button-small">${item.sentence_n}-${item.n}</span>`,
                   item.orig_form || "",
                   item.reg_form || "",
+                  (item.rdgs || "")
+                    .replace("$", "")
+                    .split(",")
+                    .filter((s) => s)
+                    .join(", "),
                   item.orig_lemma || "",
                   item.orig_postag || "",
                   item.orig_relation || "",
@@ -307,6 +313,7 @@ const datatableOptions = {
       "Pos",
       "Orig",
       "Reg",
+      "Rdgs",
       "O Lemma",
       "O Postag",
       "O Rel",
