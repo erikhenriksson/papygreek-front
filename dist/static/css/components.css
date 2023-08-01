@@ -5,6 +5,10 @@
   display: none !important;
 }
 
+.v-hidden {
+  visibility: hidden;
+}
+
 .d-block {
   display: block !important;
 }

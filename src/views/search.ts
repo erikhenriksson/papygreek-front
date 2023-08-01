@@ -19,6 +19,22 @@ const sliderChange = (t: HTMLInputElement) => {
   slider.noUiSlider.setHandle(handle, t.value);
 };
 
+const changeVariationSearchMode = () => {
+  let isVariationSearch = false;
+  document.querySelectorAll<HTMLElement>(".node-text").forEach((e) => {
+    if (e.innerText.includes("+") || e.innerText.includes("-")) {
+      isVariationSearch = true;
+    }
+    document.querySelectorAll<HTMLElement>(".variant-search").forEach((e) => {
+      if (isVariationSearch) {
+        e.classList.remove("d-none");
+      } else {
+        e.classList.add("d-none");
+      }
+    });
+  });
+};
+
 export const listeners: Listeners = {
   click: [
     {
@@ -301,6 +317,14 @@ export const listeners: Listeners = {
       callback: sliderChange,
     },
   ],
+  keyup: [
+    {
+      selector: ".node-text",
+      callback: () => {
+        changeVariationSearchMode();
+      },
+    },
+  ],
 };
 
 const datatableOptions = {
@@ -522,6 +546,7 @@ const getSearch = () => {
     "person-certainty": $<HTMLInputElement>(
       'input[name="person-certainty"]:checked'
     )!.value,
+    regularization: +$<HTMLInputElement>("#regularization")!.checked,
   };
 };
 
@@ -582,7 +607,9 @@ export default (params: Dict<string>) => {
               "#series-type-" + json["series-type"]
             )!.checked = true;
           }
-
+          if (json["regularization"]) {
+            $<HTMLInputElement>("#regularization")!.checked = true;
+          }
           $<HTMLInputElement>("#text-type")!.value = json["text-type"];
           $<HTMLInputElement>("#person-role")!.value = json["person-role"];
           $<HTMLInputElement>("#person-id")!.value = json["person-id"];
@@ -599,8 +626,9 @@ export default (params: Dict<string>) => {
           sliderChange(dna);
           sliderChange(dnb);
           updateSearchBadge(result["id"], result["name"]);
+          changeVariationSearchMode();
         } else {
-          window.location.href = `${root}search`;
+          window.location.href = `/search`;
         }
       });
     }
@@ -624,12 +652,16 @@ export default (params: Dict<string>) => {
         <div class="tf-tree tf-custom" id="tf-tree">
           <ul></ul>
         </div>
+        <div style="padding:4px 0 0;" class="variant-search d-none">
+          <input type="checkbox" id="regularization" name="regularization">
+          <label style="margin-left:6px;" for="regularization">Only regularizations</label>
+        </div>
         <div style="padding:20px 0 0;">
           <div style="font-weight:500; padding-bottom:8px;">Place</div>
           <input style="max-width:30%;" type="text" id="place-name"/>
         </div>
         <div style="padding:10px 0;">
-          <div style="font-weight:500">Dating</div>
+          <div style="font-weight:500">Date</div>
           <div id="slider"></div>
           <div><input data-handle="0" class="slider-input" style="width:50px;" type="text" id="slider-dnb"/>
           <input data-handle="1" class="slider-input" style="width:50px;"  type="text" id="slider-dna"/></div>

@@ -7,6 +7,22 @@ const sliderChange = (t) => {
     const handle = t.dataset.handle;
     slider.noUiSlider.setHandle(handle, t.value);
 };
+const changeVariationSearchMode = () => {
+    let isVariationSearch = false;
+    document.querySelectorAll(".node-text").forEach((e) => {
+        if (e.innerText.includes("+") || e.innerText.includes("-")) {
+            isVariationSearch = true;
+        }
+        document.querySelectorAll(".variant-search").forEach((e) => {
+            if (isVariationSearch) {
+                e.classList.remove("d-none");
+            }
+            else {
+                e.classList.add("d-none");
+            }
+        });
+    });
+};
 export const listeners = {
     click: [
         {
@@ -263,6 +279,14 @@ export const listeners = {
             callback: sliderChange,
         },
     ],
+    keyup: [
+        {
+            selector: ".node-text",
+            callback: () => {
+                changeVariationSearchMode();
+            },
+        },
+    ],
 };
 const datatableOptions = {
     perPage: 1000,
@@ -463,6 +487,7 @@ const getSearch = () => {
         "person-role": $("#person-role").value,
         "person-id": $("#person-id").value,
         "person-certainty": $('input[name="person-certainty"]:checked').value,
+        regularization: +$("#regularization").checked,
     };
 };
 const updateSearchBadge = (id, name) => {
@@ -512,6 +537,9 @@ export default (params) => {
                     if ("series-type" in json) {
                         $("#series-type-" + json["series-type"]).checked = true;
                     }
+                    if (json["regularization"]) {
+                        $("#regularization").checked = true;
+                    }
                     $("#text-type").value = json["text-type"];
                     $("#person-role").value = json["person-role"];
                     $("#person-id").value = json["person-id"];
@@ -526,9 +554,10 @@ export default (params) => {
                     sliderChange(dna);
                     sliderChange(dnb);
                     updateSearchBadge(result["id"], result["name"]);
+                    changeVariationSearchMode();
                 }
                 else {
-                    window.location.href = `${root}search`;
+                    window.location.href = `/search`;
                 }
             });
         }
@@ -551,12 +580,16 @@ export default (params) => {
         <div class="tf-tree tf-custom" id="tf-tree">
           <ul></ul>
         </div>
+        <div style="padding:4px 0 0;" class="variant-search d-none">
+          <input type="checkbox" id="regularization" name="regularization">
+          <label style="margin-left:6px;" for="regularization">Only regularizations</label>
+        </div>
         <div style="padding:20px 0 0;">
           <div style="font-weight:500; padding-bottom:8px;">Place</div>
           <input style="max-width:30%;" type="text" id="place-name"/>
         </div>
         <div style="padding:10px 0;">
-          <div style="font-weight:500">Dating</div>
+          <div style="font-weight:500">Date</div>
           <div id="slider"></div>
           <div><input data-handle="0" class="slider-input" style="width:50px;" type="text" id="slider-dnb"/>
           <input data-handle="1" class="slider-input" style="width:50px;"  type="text" id="slider-dna"/></div>
