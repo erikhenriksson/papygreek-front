@@ -18,7 +18,7 @@ const sliderChange = (t: HTMLInputElement) => {
   const handle = t.dataset.handle;
   slider.noUiSlider.setHandle(handle, t.value);
 };
-
+/*
 const changeVariationSearchMode = () => {
   let isVariationSearch = false;
   document.querySelectorAll<HTMLElement>(".node-text").forEach((e) => {
@@ -34,7 +34,7 @@ const changeVariationSearchMode = () => {
     });
   });
 };
-
+*/
 export const listeners: Listeners = {
   click: [
     {
@@ -265,7 +265,6 @@ export const listeners: Listeners = {
               info.innerHTML = `${resultData.length} tokens. (Upper limit for tabulation is 10000.)`;
             } else {
               let result = resultData.map((item: Dict<string>) => {
-                console.log(item);
                 return [
                   `<a data-link-newtab href="/text/${item.text_id}" target="_blank">${item.name}</a>`,
                   `<span data-sentencen="${item.sentence_n}" data-textid="${item.text_id}" data-layer="${layer}" data-tokenid="${item.id}" class="show-tree button button-plain button-small">${item.sentence_n}-${item.n}</span>`,
@@ -284,6 +283,7 @@ export const listeners: Listeners = {
                   item.reg_relation || "",
                   item.date_not_before || "",
                   item.date_not_after || "",
+                  item.regularization || "",
                 ];
               });
               dt.classList.add("d-block");
@@ -317,6 +317,7 @@ export const listeners: Listeners = {
       callback: sliderChange,
     },
   ],
+  /*
   keyup: [
     {
       selector: ".node-text",
@@ -325,6 +326,7 @@ export const listeners: Listeners = {
       },
     },
   ],
+  */
 };
 
 const datatableOptions = {
@@ -346,6 +348,7 @@ const datatableOptions = {
       "R Rel",
       "Y >",
       "< Y",
+      "V",
     ],
   },
   template: (options: Dict<any>, dom: Dict<any>) => `
@@ -546,7 +549,6 @@ const getSearch = () => {
     "person-certainty": $<HTMLInputElement>(
       'input[name="person-certainty"]:checked'
     )!.value,
-    regularization: +$<HTMLInputElement>("#regularization")!.checked,
   };
 };
 
@@ -607,9 +609,6 @@ export default (params: Dict<string>) => {
               "#series-type-" + json["series-type"]
             )!.checked = true;
           }
-          if (json["regularization"]) {
-            $<HTMLInputElement>("#regularization")!.checked = true;
-          }
           $<HTMLInputElement>("#text-type")!.value = json["text-type"];
           $<HTMLInputElement>("#person-role")!.value = json["person-role"];
           $<HTMLInputElement>("#person-id")!.value = json["person-id"];
@@ -626,7 +625,7 @@ export default (params: Dict<string>) => {
           sliderChange(dna);
           sliderChange(dnb);
           updateSearchBadge(result["id"], result["name"]);
-          changeVariationSearchMode();
+          //changeVariationSearchMode();
         } else {
           window.location.href = `/search`;
         }
@@ -651,10 +650,6 @@ export default (params: Dict<string>) => {
         </div>
         <div class="tf-tree tf-custom" id="tf-tree">
           <ul></ul>
-        </div>
-        <div style="padding:4px 0 0;" class="variant-search d-none">
-          <input type="checkbox" id="regularization" name="regularization">
-          <label style="margin-left:6px;" for="regularization">Only regularizations</label>
         </div>
         <div style="padding:20px 0 0;">
           <div style="font-weight:500; padding-bottom:8px;">Place</div>

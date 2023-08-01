@@ -7,22 +7,23 @@ const sliderChange = (t) => {
     const handle = t.dataset.handle;
     slider.noUiSlider.setHandle(handle, t.value);
 };
+/*
 const changeVariationSearchMode = () => {
-    let isVariationSearch = false;
-    document.querySelectorAll(".node-text").forEach((e) => {
-        if (e.innerText.includes("+") || e.innerText.includes("-")) {
-            isVariationSearch = true;
-        }
-        document.querySelectorAll(".variant-search").forEach((e) => {
-            if (isVariationSearch) {
-                e.classList.remove("d-none");
-            }
-            else {
-                e.classList.add("d-none");
-            }
-        });
+  let isVariationSearch = false;
+  document.querySelectorAll<HTMLElement>(".node-text").forEach((e) => {
+    if (e.innerText.includes("+") || e.innerText.includes("-")) {
+      isVariationSearch = true;
+    }
+    document.querySelectorAll<HTMLElement>(".variant-search").forEach((e) => {
+      if (isVariationSearch) {
+        e.classList.remove("d-none");
+      } else {
+        e.classList.add("d-none");
+      }
     });
+  });
 };
+*/
 export const listeners = {
     click: [
         {
@@ -226,7 +227,6 @@ export const listeners = {
                         }
                         else {
                             let result = resultData.map((item) => {
-                                console.log(item);
                                 return [
                                     `<a data-link-newtab href="/text/${item.text_id}" target="_blank">${item.name}</a>`,
                                     `<span data-sentencen="${item.sentence_n}" data-textid="${item.text_id}" data-layer="${layer}" data-tokenid="${item.id}" class="show-tree button button-plain button-small">${item.sentence_n}-${item.n}</span>`,
@@ -245,6 +245,7 @@ export const listeners = {
                                     item.reg_relation || "",
                                     item.date_not_before || "",
                                     item.date_not_after || "",
+                                    item.regularization || "",
                                 ];
                             });
                             dt.classList.add("d-block");
@@ -279,14 +280,16 @@ export const listeners = {
             callback: sliderChange,
         },
     ],
+    /*
     keyup: [
-        {
-            selector: ".node-text",
-            callback: () => {
-                changeVariationSearchMode();
-            },
+      {
+        selector: ".node-text",
+        callback: () => {
+          changeVariationSearchMode();
         },
+      },
     ],
+    */
 };
 const datatableOptions = {
     perPage: 1000,
@@ -307,6 +310,7 @@ const datatableOptions = {
             "R Rel",
             "Y >",
             "< Y",
+            "V",
         ],
     },
     template: (options, dom) => `
@@ -487,7 +491,6 @@ const getSearch = () => {
         "person-role": $("#person-role").value,
         "person-id": $("#person-id").value,
         "person-certainty": $('input[name="person-certainty"]:checked').value,
-        regularization: +$("#regularization").checked,
     };
 };
 const updateSearchBadge = (id, name) => {
@@ -537,9 +540,6 @@ export default (params) => {
                     if ("series-type" in json) {
                         $("#series-type-" + json["series-type"]).checked = true;
                     }
-                    if (json["regularization"]) {
-                        $("#regularization").checked = true;
-                    }
                     $("#text-type").value = json["text-type"];
                     $("#person-role").value = json["person-role"];
                     $("#person-id").value = json["person-id"];
@@ -554,7 +554,7 @@ export default (params) => {
                     sliderChange(dna);
                     sliderChange(dnb);
                     updateSearchBadge(result["id"], result["name"]);
-                    changeVariationSearchMode();
+                    //changeVariationSearchMode();
                 }
                 else {
                     window.location.href = `/search`;
@@ -579,10 +579,6 @@ export default (params) => {
         </div>
         <div class="tf-tree tf-custom" id="tf-tree">
           <ul></ul>
-        </div>
-        <div style="padding:4px 0 0;" class="variant-search d-none">
-          <input type="checkbox" id="regularization" name="regularization">
-          <label style="margin-left:6px;" for="regularization">Only regularizations</label>
         </div>
         <div style="padding:20px 0 0;">
           <div style="font-weight:500; padding-bottom:8px;">Place</div>
