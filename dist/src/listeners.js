@@ -55,6 +55,10 @@ export default () => {
                 if (target.closest("#smyth-menu a, #smyth-main a")) {
                     smythLinkListener(target.closest("#smyth-menu a, #smyth-main a"));
                 }
+                else if (target.closest("#chapter a")) {
+                    window.open(target.closest("a").getAttribute("href") || "");
+                    return;
+                }
                 else {
                     const a = target.closest("a");
                     if (a.classList.contains("datatable-sorter"))

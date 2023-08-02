@@ -1,9 +1,11 @@
+/*
 @font-face {
   font-family: "zephtext";
   src: url("/static/fonts/zephtext.ttf");
   unicode-range: U+0370-03FF, U+1F00-1FFF;
   font-size: 125%;
 }
+*/
 
 * {
   text-rendering: auto;
@@ -11,7 +13,10 @@
 }
 
 body {
-  font-family: "zephtext", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+  /*font-family: "zephtext", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+    "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";*/
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
     "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji",
     "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 0.875rem;
