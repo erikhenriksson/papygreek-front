@@ -482,6 +482,7 @@ const getChapter = (chapterId: string) => {
         }
 
         $$(".menu-span").forEach((itm) => {
+          itm.closest(".main-level")!.classList.remove("current");
           itm.classList.remove("current");
         });
 
@@ -489,6 +490,7 @@ const getChapter = (chapterId: string) => {
           `.menu-span[data-chapterid="${chapterId}"]`
         );
         if (currentMenuItem) {
+          currentMenuItem.closest(".main-level")!.classList.add("current");
           currentMenuItem.classList.add("current");
         }
 
@@ -523,16 +525,24 @@ const getSidebarMenu = () => {
     if (data["ok"]) {
       let htmlStr = "";
       menuCache = data["result"];
+      let c = 0;
       menuCache.forEach((el) => {
-        htmlStr += `<span data-chapterid="${
-          el.id
-        }" class="menu-span" style="display:block; margin-left:${
+        if (el.level == 1 || el.level == 0) {
+          if (c > 0) {
+            htmlStr += "</span>";
+          }
+          htmlStr += `<span class="main-level">`;
+        }
+        htmlStr += `<span data-chapterid="${el.id}" class="menu-span level-${
+          el.level
+        }" style="margin-left:${
           Math.max(el.level - 1, 0) * 20
         }px; margin-bottom:${
           el.level == 0 ? `0px` : ``
         }"><span class="chapter-link" data-chapterid="${el.id}">${
           el.parent_id ? el.path.slice(1) : ""
         } ${el.title}</span></span>`;
+        c += 1;
       });
       let menu = $("#menu");
       if (menu) {
@@ -547,7 +557,7 @@ export default (params: { [key: string]: string }) => {
     if (!isEmpty(user)) {
       return `
       <section style="grid-column: span 3">
-        <h3 style="margin-top:10px;">Chapters</h3>
+        <h3 style="margin-top:10px;">Table of contents</h3>
         <div id="menu">${loader()}</div>
       </section>
       <section id="chapter-main" style="padding: 0 40px; grid-column: 4 / span 10">

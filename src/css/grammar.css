@@ -20,15 +20,6 @@
   margin-bottom: 7px;
 }
 
-#menu a {
-  color: dimgrey;
-}
-
-#menu .current a {
-  color: black;
-  font-weight: 500;
-}
-
 #refs {
   text-indent: -30px;
   margin-left: 30px;
@@ -111,4 +102,46 @@
 .enlarge-button.minimize:after {
   content: "⇲";
   display: "block";
+}
+
+/* Menu */
+
+#menu .main-level {
+  display: block;
+  background: whitesmoke;
+  padding: 4px;
+  margin: 5px 0;
+  border-radius: 5px;
+}
+
+#menu .main-level.current {
+  background: antiquewhite;
+}
+
+#menu a {
+  color: dimgrey;
+}
+
+#menu .menu-span.current {
+  color: brown;
+  font-weight: 600;
+}
+
+#menu .menu-span.level-0,
+#menu .menu-span.level-1 {
+  display: block !important;
+}
+
+#menu .menu-span.level-2,
+#menu .menu-span.level-3,
+#menu .menu-span.level-4 {
+  font-size: 14px;
+}
+
+#menu .menu-span {
+  display: none;
+}
+
+#menu .main-level.current .menu-span {
+  display: block !important;
 }
