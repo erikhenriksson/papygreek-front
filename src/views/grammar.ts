@@ -544,7 +544,8 @@ const getSidebarMenu = () => {
 
 export default (params: { [key: string]: string }) => {
   const getHtml = () => {
-    return `
+    if (!isEmpty(user)) {
+      return `
       <section style="grid-column: span 3">
         <h3 style="margin-top:10px;">Chapters</h3>
         <div id="menu">${loader()}</div>
@@ -554,6 +555,9 @@ export default (params: { [key: string]: string }) => {
       </section>
       <svg id="svg-canvas"></svg>
   `;
+    } else {
+      return `<section style="text-align:center;">Coming soon!</section>`;
+    }
   };
 
   const afterRender = () => {
