@@ -2,6 +2,20 @@
   text-align: center;
 }
 
+#help {
+  font-size: 17px;
+  border: 1px solid rosybrown;
+  border-radius: 26px;
+  width: 20px;
+  display: inline-block;
+  height: 20px;
+  line-height: 15px;
+  background: antiquewhite;
+  cursor: pointer;
+  position: relative;
+  top: -7px;
+}
+
 /* Search boxes */
 
 .tf-custom .tf-nc .node-text {
@@ -381,4 +395,26 @@ li span.target {
   padding-right: 4px;
   font-size: 20px;
   color: #333;
+}
+
+#instructions-modal code {
+  color: darkred;
+  padding: 2px 3px;
+  border: 1px solid silver;
+  border-radius: 3px;
+}
+
+#instructions-modal ul {
+  margin-bottom: 10px;
+}
+
+#instructions-modal h2,
+#instructions-modal h3,
+#instructions-modal h4,
+#instructions-modal h5 {
+  font-weight: 500;
+}
+
+#instructions-modal ul li {
+  list-style-type: disc !important;
 }

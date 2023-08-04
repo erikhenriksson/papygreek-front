@@ -299,6 +299,12 @@ export const listeners: Listeners = {
         });
       },
     },
+    {
+      selector: "#help",
+      callback: () => {
+        $<HTMLElement>("#instructions-modal")!.classList.remove("d-none");
+      },
+    },
   ],
   keydown: [
     {
@@ -637,7 +643,7 @@ export default (params: Dict<string>) => {
   const getHtml = () => {
     let userButtons = !isEmpty(user) ? `` : `hidden`;
     return `
-      <h1>Search</h1>
+      <h1 style="margin-left:10px;">Search <span id="help">ℹ</span></h1>
       <section id="saved-search-badge" class="d-none centered">
         <span class="semi-bold">Saved search: </span><span id="saved-search-name" class="badge-small"></span> <span class="semi-bold" style="font-variant:small-caps">id: </span> <span class="badge-small badge-grey" id="saved-search-id"></span>
       </section>
@@ -743,6 +749,96 @@ export default (params: Dict<string>) => {
       </div>
       <div id="overlay" class="d-none"></div>
       <div id="cloned-graph" class="d-none"><div class="freq-graph"></div></div>
+      <div id="instructions-modal" class="d-none modal">
+          <div class="modal-content">
+          <h2>PapyGreek Search - User Guide</h2>
+          <p></p>
+          <p>Welcome to PapyGreek Search, an advanced tool for the linguistic study of Greek papyri. This user guide provides instructions on how to use PapyGreek Search to explore basic word forms, linguistic annotations, variants, and syntactic dependency relationships.</p>
+        
+          
+          <h3>How to Search</h3>
+          
+          <ol>
+              <li>
+                <h4>Linguistic Layer Selection</h4>
+                <ul>
+                    <li>At the top of the interface, you will see options to select either the "Original" or "Regularized" linguistic layer. This choice will determine whether your search targets the original text or the version of the text that has been corrected by editors.</li>
+                    <li>Click on the desired option to select it.</li>
+                </ul>
+            </li>
+              <li>
+                  <h4>Basic Search</h4>
+                  <ul>
+                      <li>In the blue box at the center of the interface, type your search parameters in the format: <code>parameter=[value]</code>. For example, to search for the basic word form και in the non-corrected original text, select "Original" from the top selection, then type <code>form=και</code> in the blue box (without the quotation marks). The <code>form</code> parameter is used to search for specific word forms within the database.</li>
+                      <li>Diacritics are ignored in search queries, so only include alphabetic characters.</li>
+                      <li>The wildcard symbol <code>%</code> and underscore <code>_</code> can be used. <code>%</code> matches any string of characters, while <code>_</code> skips a single character. For example, <code>form=κ_μη%</code> will find forms such as κώμης and καμήλια.</li>
+                      <li>Click on the "Search" button to initiate the search.</li>
+                  </ul>
+              </li>
+              <li>
+                  <h4>Variation Search</h4>
+                  <ul>
+                      <li>To search for linguistic variants, use the <code>form</code> parameter in combination with symbols representing editorial actions: <code>+</code> (plus) for additions, <code>-</code> (minus) for deletions. For example, <code>form=-ι</code> would yield all instances where ι has been deleted by an editor, while <code>form=+ι</code> would reveal all cases where ι was added.</li>
+                      <li>To find editorial replacements, use a combination of the <code>-</code> and <code>+</code> symbols. For example, to find instances where ε has been replaced by η, the search term would be <code>form=-ε+η</code>.</li>
+                      <li>To further refine the search based on context, use the symbols <code>></code> (before) and <code><</code> (after). For instance, to find instances where ε has been corrected to αι following λ, the query would be <code>form=λ>-ε+αι</code>.</li>
+                      <li>Regular expressions can be used through the <code>regex:form=</code> parameter, allowing you to create more intricate and specific search criteria. Detailed examples of this will be provided later in this guide. </li>
+                      <li>For variation searches, the selection between "Original" and "Regularized" at the top of the interface is disregarded.  </li>
+                  </ul>
+              </li>
+              <li>
+                  <h4>Morphosyntactic Search (Single Words)</h4>
+                  <ul>
+                      <li>To search for morphology and syntax of single word forms, use the parameters <code>lemma</code>, <code>lemma_plain</code>, <code>postag</code>, and <code>relation</code>.</li>
+                      <li>The <code>lemma</code> and <code>lemma_plain</code> parameters are for searching dictionary forms with diacritics (e.g., <code>lemma=εἰμί</code>) and without diacritics (e.g., <code>lemma_plain=ειμι</code>), respectively.</li>
+                      <li>The <code>postag</code> parameter targets part of speech tags. Refer to <a href="https://github.com/gcelano/LemmatizedAncientGreekXML">this list</a> for the available tags and codes. The wildcard symbol <code>%</code> is particularly useful with this parameter (e.g., <code>postag=v%</code> to find all verbs).</li>
+                      <li>The <code>relation</code> parameter targets syntactic relations as encoded in the dependency treebank annotation style. For example, to find predicates, you can type <code>relation=PRED</code>.</li>
+                  </ul>
+              </li>
+              <li>
+                  <h4>Dependency Tree Search</h4>
+                  <ul>
+                      <li>To search for dependency trees, add additional "blue boxes" to your search.</li>
+                      <li>Click the "+" button at the bottom of the existing blue box to add a new one below it. You can add as many boxes as needed to construct your desired tree structure.</li>
+                      <li>In each box, use any of the previously mentioned parameters. For example, to search for (sub)trees where an object is dependent on a predicate, type <code>relation=PRED</code> in the first box, add a new box below it, and there type <code>relation=OBJ</code>.</li>
+                      <li>The parameter <code>depth</code> allows users to specify the depth in the tree in which the box in question is in regard to the parent node. The default is <code>1</code> (immediately below). It can either have a number (for instance, <code>2</code> would skip one level), or the asterisk symbol (<code>*</code>), which means that the depth will be ignored and all nodes that have the specified parent will be matched.</li>
+                      <li>By default, word order is ignored; parameters specifying word order are currently under development.</li>
+                  </ul>
+              </li>
+          </ol>
+
+          <h3>A Basic Guide to Regular Expressions in PapyGreek Search</h3>
+
+          <p>Regular expressions, or regex, are sequences of characters defining a search pattern. This can be very helpful in searching texts. In PapyGreek Search, regular expressions can be used with the "regex:form=" parameter.</p>
+          
+          <ul>
+              <li><code>^</code>: Matches the start of a string.</li>
+              <li><code>$</code>: Matches the end of a string.</li>
+              <li><code>[ ]</code>: Matches any single character enclosed in the square brackets. For example, <code>[αεηιοω]</code> matches all Greek vowels.</li>
+              <li><code>( )</code>: Defines a group that you can quantify.</li>
+              <li><code>+</code>: Matches one or more of the preceding element.</li>
+              <li><code>-</code>: Used in character ranges, e.g., <code>[α-ω]</code> matches any lowercase Greek letter.</li>
+          </ul>
+          
+          <p>In PapyGreek Search, the symbols <code>+</code> (plus) and <code>-</code> (minus) have special meaning in the context of searching for editorial additions and removals. However, in regex mode, you can use the symbols <code>＋</code> (Full-width Plus, U+FF0B) and <code>－</code> (Full-width Hyphen-minus, U+FF0D) to act as the regular <code>+</code> and <code>-</code> in regular expressions. The PapyGreek Search system will transform these full-width symbols back into their regular regex counterparts. </p>
+          
+          <p>If the <code>regex:form=</code> parameter is used in conjunction with a variation search (involving the symbols <code>+</code>, <code>-</code>, <code><</code>, and <code>></code>), each of the queried substrings (for example, after <code>+</code> or before <code><</code>) must be determined with their own regex search pattern. </p>
+          <h3>Example of a Complex Regex Query</h3>
+
+          <p>Let's consider a relatively complex example. You want to find all cases of the original transcription containing either ω or ωι corrected to ου, and only when this correction appears word-finally. Here's how you would form the query:</p>
+
+          <ol>
+              <li>Use the parameter <code>regex:form=</code> to initiate the regex mode.</li>
+              <li>Since you're searching for replacements and their right-hand context, you will be using the symbols <code>+</code>, <code>-</code> and <code><</code>.</li>
+              <li>The removed string is either ω or ωι, which translates to <code>^(ω|ωι)$</code> in the regex syntax. This means the start of the string (<code>^</code>) followed by ω or ωι (<code>ω|ωι</code>) and then the end of the string (<code>$</code>).</li>
+              <li>The added string is ου, which is written as <code>^ου$</code> in regex. This means the string starts (<code>^</code>) with ου and then immediately ends (<code>$</code>).</li>
+              <li>You want the right-hand context to be empty, which in regex is typed as <code>^$</code> (starts and ends without anything in between).</li>
+          </ol>
+
+          <p>The full query, then, is: <code>regex:form=-^(ω|ωι)$+^ου$<^$</code>.</p>
+          
+          <span class="button button-grey button-small modal-close"></span>
+          </div>
+      </div>
     `;
   };
 
