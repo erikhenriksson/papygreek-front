@@ -580,9 +580,15 @@ const getSearch = () => {
         "person-certainty": $('input[name="person-certainty"]:checked').value,
     };
 };
-const updateSearchBadge = (id, name) => {
+const updateSearchBadge = (id, user_id, name) => {
     $("#saved-search-name").innerHTML = name;
     $("#saved-search-id").innerHTML = id;
+    if (user_id == getUser().user.id) {
+        $("#delete-search").classList.remove("d-none");
+    }
+    else {
+        $("#delete-search").classList.add("d-none");
+    }
     $("#delete-search").dataset.searchid = id;
     $("#saved-search-badge").classList.remove("d-none");
 };
@@ -614,7 +620,7 @@ const saveSearch = (t) => {
                     else {
                         buttonDone(t, "Updated!");
                     }
-                    updateSearchBadge(data.result.id, $("#search-name").innerText);
+                    updateSearchBadge(data.result.id, getUser().user.id, $("#search-name").innerText);
                 }
             });
         }
@@ -656,7 +662,7 @@ export default (params) => {
                     dnb.value = json["dnb"];
                     sliderChange(dna);
                     sliderChange(dnb);
-                    updateSearchBadge(result["id"], result["name"]);
+                    updateSearchBadge(result["id"], result["user_id"], result["name"]);
                     //changeVariationSearchMode();
                 }
                 else {

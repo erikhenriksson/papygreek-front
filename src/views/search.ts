@@ -653,9 +653,16 @@ const getSearch = () => {
   };
 };
 
-const updateSearchBadge = (id: string, name: string) => {
+const updateSearchBadge = (id: string, user_id: string, name: string) => {
   $<HTMLElement>("#saved-search-name")!.innerHTML = name;
   $<HTMLElement>("#saved-search-id")!.innerHTML = id;
+
+  if (user_id == getUser().user.id) {
+    $<HTMLElement>("#delete-search")!.classList.remove("d-none");
+  } else {
+    $<HTMLElement>("#delete-search")!.classList.add("d-none");
+  }
+
   $<HTMLElement>("#delete-search")!.dataset.searchid = id;
   $<HTMLElement>("#saved-search-badge")!.classList.remove("d-none");
 };
@@ -693,6 +700,7 @@ const saveSearch = (t: HTMLElement) => {
           }
           updateSearchBadge(
             data.result.id,
+            getUser().user.id,
             $<HTMLElement>("#search-name")!.innerText
           );
         }
@@ -745,7 +753,7 @@ export default (params: Dict<string>) => {
           dnb.value = json["dnb"];
           sliderChange(dna);
           sliderChange(dnb);
-          updateSearchBadge(result["id"], result["name"]);
+          updateSearchBadge(result["id"], result["user_id"], result["name"]);
           //changeVariationSearchMode();
         } else {
           window.location.href = `/search`;
