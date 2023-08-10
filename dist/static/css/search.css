@@ -3,17 +3,28 @@
 }
 
 #help {
-  font-size: 17px;
-  border: 1px solid rosybrown;
+  font-size: 13px;
   border-radius: 26px;
   width: 20px;
   display: inline-block;
   height: 20px;
-  line-height: 15px;
-  background: antiquewhite;
+  line-height: 20px;
+  background: moccasin;
   cursor: pointer;
   position: relative;
   top: -7px;
+  font-weight: 500;
+}
+
+.help-link {
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.fullwidth {
+  width: calc(100vw - 20px);
+  margin-left: calc(-50vw + 50% + 10px);
+  padding: 0 30px;
 }
 
 /* Search boxes */
@@ -417,4 +428,9 @@ li span.target {
 
 #instructions-modal ul li {
   list-style-type: disc !important;
+}
+
+.search-list,
+.search-list li {
+  list-style-type: none;
 }

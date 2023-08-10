@@ -27,6 +27,26 @@ const changeVariationSearchMode = () => {
 export const listeners = {
     click: [
         {
+            selector: "#export-csv",
+            callback: (_t) => {
+                // @ts-ignore
+                const data = simpleDatatables.exportCSV(window.datatable, {
+                    lineDelimiter: "\n",
+                    columnDelimiter: ";",
+                });
+                const blob = new Blob([data], {
+                    type: "text/plain;charset=utf8", // or whatever your Content-Type is
+                });
+                const aElement = document.createElement("a");
+                aElement.setAttribute("download", "PG-search-results.csv");
+                const href = URL.createObjectURL(blob);
+                aElement.href = href;
+                aElement.setAttribute("target", "_blank");
+                aElement.click();
+                URL.revokeObjectURL(href);
+            },
+        },
+        {
             selector: ".show-tree",
             callback: (t) => {
                 let queryData = {
@@ -110,6 +130,21 @@ export const listeners = {
             selector: "#save-search",
             callback: (t) => {
                 saveSearch(t);
+            },
+        },
+        {
+            selector: "#delete-search",
+            callback: (t) => {
+                if (confirm("Do you wish to delete this search?") == true) {
+                    post(`/search/delete`, { id: t.dataset.searchid }).then((data) => {
+                        if (data && data.ok) {
+                            window.location.href = `/search`;
+                        }
+                        else {
+                            alert("An unknown error happened. Sorry about that.");
+                        }
+                    });
+                }
             },
         },
         {
@@ -202,7 +237,7 @@ export const listeners = {
                 let info = $(".info");
                 info.innerHTML = "";
                 msg.innerHTML = "";
-                btn.innerHTML = 'Searching <span class="loader-small"/>';
+                btn.innerHTML = 'Searching <span class="loader-white-small"/>';
                 window.datatable.search("");
                 window.datatable.destroy();
                 window.datatable.init(datatableOptions);
@@ -212,11 +247,12 @@ export const listeners = {
                 $("#datebars")?.classList.remove("d-none");
                 post(`/search/`, getSearch()).then((data) => {
                     let layer = $('input[name="layer"]:checked').value;
-                    const resultData = data.result.data;
                     if (data && data.ok) {
+                        const resultData = data.result.data;
                         if (!resultData.length) {
                             info.innerHTML = `No results`;
                             $("#datebars")?.classList.add("d-none");
+                            btn.innerHTML = "Search";
                             return;
                         }
                         const dateFreq = data.result.date_frequencies;
@@ -263,9 +299,54 @@ export const listeners = {
             },
         },
         {
-            selector: "#help",
+            selector: "#help, .help-link",
             callback: () => {
                 $("#instructions-modal").classList.remove("d-none");
+            },
+        },
+        {
+            selector: "#search-list",
+            callback: () => {
+                get(`/search/get_saved`).then((data) => {
+                    if (data.ok) {
+                        if (data.result.length) {
+                            $("#user-searches").innerHTML = `
+              <ul class="search-list">
+              ${data.result
+                                .map((s) => {
+                                return `<li> <a href="/search/${s.id}">${s.name || "[Untitled]"} <span class="badge badge-small badge-grey">${s.id}</span></a> ${s.public
+                                    ? `<span class="badge badge-small">public</span>`
+                                    : ""}</li>`;
+                            })
+                                .join("")}
+                </ul>
+            `;
+                        }
+                        else {
+                            $("#user-searches").innerHTML = `<span class="info">You haven't yet saved any searches.</span>`;
+                        }
+                    }
+                    get(`/search/get_others_public`).then((data) => {
+                        if (data.ok) {
+                            if (data.result.length) {
+                                $("#public-searches").innerHTML = `
+                <ul class="search-list">
+                ${data.result
+                                    .map((s) => {
+                                    return `<li> <a href="/search/${s.id}">${s.name || "[Untitled]"}<span class="badge badge-small badge-grey">${s.id}</span></a> <span class="badge badge-small badge-green">${s.user_name}</span>
+                    </li>`;
+                                })
+                                    .join("")}
+                  </ul>
+                `;
+                            }
+                            else {
+                                $("#public-searches").innerHTML = `<span class="info">No saved public searches.</span>`;
+                            }
+                        }
+                    });
+                    $("#searches-modal").classList.remove("d-none");
+                });
             },
         },
     ],
@@ -323,7 +404,7 @@ const datatableOptions = {
     <div class='${options.classes.top}'>
       ${options.searchable
         ? `<div class='${options.classes.search}'>
-              <input class='${options.classes.input}' placeholder='${options.labels.placeholder}' type='search' title='${options.labels.searchTitle}'${dom.id ? ` aria-controls="${dom.id}"` : ""}>
+              <input class='${options.classes.input}' placeholder='${options.labels.placeholder}' type='search' title='${options.labels.searchTitle}'${dom.id ? ` aria-controls="${dom.id}"` : ""}> <span style="margin-left:10px;" id="export-csv" class="button button-small button-plain">Export as CSV</span>
               </div>`
         : ""}
       ${options.paging ? `<div class='${options.classes.info}'></div>` : ""}
@@ -502,24 +583,40 @@ const getSearch = () => {
 const updateSearchBadge = (id, name) => {
     $("#saved-search-name").innerHTML = name;
     $("#saved-search-id").innerHTML = id;
+    $("#delete-search").dataset.searchid = id;
     $("#saved-search-badge").classList.remove("d-none");
 };
 const saveSearch = (t) => {
     buttonWait(t);
-    post(`/search/save`, {
+    const name = $("#search-name").innerText;
+    post(`/search/check_if_exists`, {
         q: getSearch(),
-        name: $("#search-name").innerText,
+        name: name,
         public: +$("#public").checked,
     }).then((data) => {
         if (data && data.ok) {
-            if (data.result.new == 1) {
-                history.pushState(null, "", `/search/${data.result.id}`);
-                buttonDone(t, "Saved!");
+            if (data.result.length) {
+                if (confirm(`The search named "${name}" will be overwritten. Continue?`) != true) {
+                    buttonDone(t, "Cancelled!");
+                    return;
+                }
             }
-            else {
-                buttonDone(t, "Updated!");
-            }
-            updateSearchBadge(data.result.id, $("#search-name").innerText);
+            post(`/search/save`, {
+                q: getSearch(),
+                name: name,
+                public: +$("#public").checked,
+            }).then((data) => {
+                if (data && data.ok) {
+                    if (data.result.new == 1) {
+                        history.pushState(null, "", `/search/${data.result.id}`);
+                        buttonDone(t, "Saved!");
+                    }
+                    else {
+                        buttonDone(t, "Updated!");
+                    }
+                    updateSearchBadge(data.result.id, $("#search-name").innerText);
+                }
+            });
         }
     });
 };
@@ -572,9 +669,12 @@ export default (params) => {
     const getHtml = () => {
         let userButtons = !isEmpty(user) ? `` : `hidden`;
         return `
-      <h1 style="margin-left:10px;">Search <span id="help">ℹ</span></h1>
+      <h1 style="margin-left:10px;">Search <span id="help">?</span></h1>
+      <section class="centered ${userButtons}" style="margin-top:-9px;">
+        <span id="search-list" class="button button-small button-outline">Saved searches</span>
+      </section>
       <section id="saved-search-badge" class="d-none centered">
-        <span class="semi-bold">Saved search: </span><span id="saved-search-name" class="badge-small"></span> <span class="semi-bold" style="font-variant:small-caps">id: </span> <span class="badge-small badge-grey" id="saved-search-id"></span>
+        <span style="font-size:85%;" class="semi-bold">Saved search: </span><span id="saved-search-name" class="badge-small"></span> <span class="semi-bold" style="font-variant:small-caps; font-size:85%;">id: </span> <span class="badge-small badge-grey" id="saved-search-id"></span> <span id="delete-search" class="badge badge-small badge-red" style="cursor:pointer;">x</span>
       </section>
       <section class="search">
         <div style="padding-bottom:20px;">
@@ -666,7 +766,7 @@ export default (params) => {
             <div class="freq-graph" id="relative-frequencies"></div>
             <div class="d-none freq-graph" id="absolute-frequencies"></div>
         </div>
-        <div style="font-size:90%">
+        <div style="font-size:90%" class="fullwidth">
           <table id="datatable"></table>
         </div>
       </section>
@@ -678,6 +778,16 @@ export default (params) => {
       </div>
       <div id="overlay" class="d-none"></div>
       <div id="cloned-graph" class="d-none"><div class="freq-graph"></div></div>
+      <div id="searches-modal" class="d-none modal">
+          <div class="modal-content">
+            <span class="button button-grey button-small modal-close"></span>
+            <h2 class="centered">Saved searches</h2>
+            <h3 class="centered">My searches</h3>
+            <div id="user-searches"></div>
+            <h3 class="centered">Other users' public searches</h3>
+            <div id="public-searches"></div>
+          </div>
+      </div>
       <div id="instructions-modal" class="d-none modal">
           <div class="modal-content">
           <h2>PapyGreek Search - User Guide</h2>
@@ -719,7 +829,7 @@ export default (params) => {
                   <ul>
                       <li>To search for morphology and syntax of single word forms, use the parameters <code>lemma</code>, <code>lemma_plain</code>, <code>postag</code>, and <code>relation</code>.</li>
                       <li>The <code>lemma</code> and <code>lemma_plain</code> parameters are for searching dictionary forms with diacritics (e.g., <code>lemma=εἰμί</code>) and without diacritics (e.g., <code>lemma_plain=ειμι</code>), respectively.</li>
-                      <li>The <code>postag</code> parameter targets part of speech tags. Refer to <a href="https://github.com/gcelano/LemmatizedAncientGreekXML">this list</a> for the available tags and codes. The wildcard symbol <code>%</code> is particularly useful with this parameter (e.g., <code>postag=v%</code> to find all verbs).</li>
+                      <li>The <code>postag</code> parameter targets part of speech tags. Refer to <a target="_blank" data-external="1" href="https://github.com/gcelano/LemmatizedAncientGreekXML">this list</a> for the available tags and codes. The wildcard symbol <code>%</code> is particularly useful with this parameter (e.g., <code>postag=v%</code> to find all verbs).</li>
                       <li>The <code>relation</code> parameter targets syntactic relations as encoded in the dependency treebank annotation style. For example, to find predicates, you can type <code>relation=PRED</code>.</li>
                   </ul>
               </li>

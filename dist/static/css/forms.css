@@ -46,7 +46,7 @@ input[type="radio"] + label {
 }
 input[type="radio"]:checked + label {
   background: linear-gradient(-27deg, gainsboro, rgb(230, 230, 230));
-  border: 1px solid lightgray;
+  border: 1px solid 1px solid rgb(220, 220, 220);
 }
 
 input.arrow[type="checkbox"] + label::before {

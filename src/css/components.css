@@ -51,7 +51,6 @@
 #msg {
   color: darkred;
   padding: 16px;
-  font-family: "Courier New", Courier, monospace;
   font-weight: 500;
 }
 
@@ -59,9 +58,9 @@
 
 .button {
   color: white;
-  background: linear-gradient(-27deg, #004d4d, teal);
+  background: linear-gradient(-23deg, rgb(0, 90, 90), teal);
   border: none;
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 4px 6px;
   margin: 0 3px 0 0;
   font-size: 11px !important;
@@ -74,6 +73,12 @@
 .button-plain {
   color: #004d4d;
   background: none;
+}
+
+.button-outline {
+  color: black;
+  background: none;
+  border: 1px solid silver;
 }
 
 .button-small {
