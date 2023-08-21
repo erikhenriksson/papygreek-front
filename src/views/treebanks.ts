@@ -20,7 +20,7 @@ export const listeners: Listeners = {
       callback: (t: HTMLElement) => {
         buttonWait(t);
         getFile(`/xml/release`).then((data) => {
-          downloadAsFile(data, "papygreek-treebanks.xml");
+          downloadAsFile(data, "papygreek-treebanks.zip");
           buttonDone(t, "Downloaded!");
         });
       },
