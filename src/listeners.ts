@@ -3,6 +3,7 @@ import { Dict, Listeners } from "./types.js";
 
 import { listeners as accountListeners } from "./views/account.js";
 import { listeners as grammarListeners } from "./views/grammar.js";
+import { listeners as treebanksListeners } from "./views/treebanks.js";
 import { listeners as peopleListeners } from "./views/people.js";
 import { listeners as personListeners } from "./views/person.js";
 import { smythLinkListener } from "./views/smyth.js";
@@ -20,6 +21,7 @@ let listeners: Dict<any> = {};
 let viewListeners = [
   accountListeners,
   grammarListeners,
+  treebanksListeners,
   peopleListeners,
   personListeners,
   searchListeners,

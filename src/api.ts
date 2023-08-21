@@ -4,7 +4,8 @@ const api = async (
   url: string,
   method: string,
   data: object = {},
-  headers: object = { "Content-Type": "application/json" }
+  headers: object = { "Content-Type": "application/json" },
+  parse: string = "json"
 ) => {
   const user = JSON.parse(localStorage.getItem("user") || "{}");
   try {
@@ -21,14 +22,18 @@ const api = async (
       params["headers"]["Authorization"] = `Bearer ${user.token}`;
     }
     const response = await fetch(cnf.api + url, params);
-    let result = await response.json();
-    if (response.ok) {
-      return result;
-    } else {
-      if (response.status == 401) {
-        localStorage.removeItem("user");
-        window.location.href = "/bye";
+    if (parse == "json") {
+      let result = await response.json();
+      if (response.ok) {
+        return result;
+      } else {
+        if (response.status == 401) {
+          localStorage.removeItem("user");
+          window.location.href = "/bye";
+        }
       }
+    } else if (parse == "blob") {
+      return await response.blob();
     }
   } catch (err) {
     console.log(err);
@@ -36,6 +41,8 @@ const api = async (
 };
 
 export const get = async (url: string) => api(url, "GET");
+export const getFile = async (url: string) =>
+  api(url, "GET", {}, { "Content-Type": "application/json" }, "blob");
 export const post = async (
   url: string,
   data: object,

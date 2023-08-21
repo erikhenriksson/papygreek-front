@@ -4,11 +4,29 @@ import {
   getUser,
   activateTab,
   isEmpty,
+  buttonWait,
+  buttonDone,
+  downloadAsFile,
 } from "../utils.js";
-import { get } from "../api.js";
-import { ApiResult } from "../types.js";
+import { get, getFile } from "../api.js";
+import { ApiResult, Listeners } from "../types.js";
 
 let cache: string;
+
+export const listeners: Listeners = {
+  click: [
+    {
+      selector: ".export-finalized",
+      callback: (t: HTMLElement) => {
+        buttonWait(t);
+        getFile(`/xml/release`).then((data) => {
+          downloadAsFile(data, "papygreek-treebanks.xml");
+          buttonDone(t, "Downloaded!");
+        });
+      },
+    },
+  ],
+};
 
 export default (params: { [key: string]: string }) => {
   const urlMap: { [key: string]: string } = {
@@ -86,6 +104,11 @@ export default (params: { [key: string]: string }) => {
       }
       const containerVal = `
         <section class="info">${data.result.length} texts</section>
+        ${
+          !isEmpty(user) && treebankTypeQuery == "3"
+            ? `<section class="centered"><span class="export-finalized button button-small">Export as XML</span></section>`
+            : ""
+        }
         <section id="treebanks" style="column-count: 3; padding-top:20px; margin:0 30px; text-align:center">${resultHTML}</section>
       `;
       container.innerHTML = containerVal;

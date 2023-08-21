@@ -1,4 +1,5 @@
-import { get } from "../../api.js";
+import { get, getFile } from "../../api.js";
+import { downloadAsFile, buttonWait, buttonDone } from "../../utils.js";
 import { ApiResult, Listeners } from "../../types.js";
 
 export const listeners: Listeners = {
@@ -6,17 +7,9 @@ export const listeners: Listeners = {
     {
       selector: ".download-backup",
       callback: (t: HTMLElement) => {
-        fetch(t.dataset.href || "", { method: "get" })
-          .then((res) => res.blob())
-          .then((res) => {
-            const aElement = document.createElement("a");
-            aElement.setAttribute("download", "treebank-backup.xml");
-            const href = URL.createObjectURL(res);
-            aElement.href = href;
-            aElement.setAttribute("target", "_blank");
-            aElement.click();
-            URL.revokeObjectURL(href);
-          });
+        getFile(t.dataset.href || "").then((data) => {
+          downloadAsFile(data, "treebank-backup.xml");
+        });
       },
     },
   ],
@@ -29,7 +22,7 @@ export default async (doc: any) => {
         <div class="centered">
         ${data.result
           .map((el: any) => {
-            return `<p><span style="cursor:pointer;color:firebrick" class="download-backup" data-href="${cnf.api}/text/${doc.id}/archive/${el.id}">${el.created}</a></p>`;
+            return `<p><span style="cursor:pointer;color:firebrick" class="download-backup" data-href="/text/${doc.id}/archive/${el.id}">${el.created}</a></p>`;
           })
           .join("")}
         </div>`;
