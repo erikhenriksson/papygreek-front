@@ -1,5 +1,5 @@
 import { get, getFile } from "../../api.js";
-import { downloadAsFile, buttonWait, buttonDone } from "../../utils.js";
+import { downloadAsFile } from "../../utils.js";
 import { ApiResult, Listeners } from "../../types.js";
 
 export const listeners: Listeners = {

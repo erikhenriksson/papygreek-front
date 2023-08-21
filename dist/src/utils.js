@@ -118,6 +118,15 @@ export const buttonWait = (btn) => {
     btn.dataset.txt = btn.innerHTML;
     btn.innerHTML = '<span class="loader-white-small"/>';
 };
+export const downloadAsFile = (data, name) => {
+    const aElement = document.createElement("a");
+    aElement.setAttribute("download", name);
+    const href = URL.createObjectURL(data);
+    aElement.href = href;
+    aElement.setAttribute("target", "_blank");
+    aElement.click();
+    URL.revokeObjectURL(href);
+};
 export const aowRoles = () => {
     return [
         ["addressee", "Addressee"],
