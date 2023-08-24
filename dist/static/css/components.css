@@ -203,6 +203,12 @@
   color: white;
 }
 
+.badge-info {
+  background: aliceblue;
+  border: 1px solid silver;
+  padding: 5px;
+}
+
 /* Loader */
 
 @keyframes spinner {

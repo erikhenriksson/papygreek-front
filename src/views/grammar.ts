@@ -1,10 +1,9 @@
 import {
   setTitle,
   loader,
-  getUser,
   buttonDone,
   buttonWait,
-  isEmpty,
+  haveEditor,
 } from "../utils.js";
 import { get, post } from "../api.js";
 import { Listeners, Dict } from "../types.js";
@@ -12,7 +11,7 @@ import { Listeners, Dict } from "../types.js";
 let menuCache: Array<any> = [];
 let cys: Dict<any> = {};
 
-const user = getUser();
+const userIsEditor = haveEditor();
 
 const resizeCy = (cy: string) => {
   cys[cy].ready(() => {
@@ -88,6 +87,24 @@ export const listeners: Listeners = {
       },
     },
     {
+      selector: "#publish-release",
+      callback: (t: HTMLElement) => {
+        buttonWait(t);
+        const versionNumber = $<HTMLInputElement>(
+          "#new-release-version"
+        )!.value;
+        post(`/chapter/release`, {
+          version: versionNumber,
+        }).then((val) => {
+          if (val["ok"]) {
+            buttonDone(t, "Published!");
+          } else {
+            alert(val);
+          }
+        });
+      },
+    },
+    {
       selector: ".enlarge-button.maximize",
       callback: (t: HTMLElement) => {
         const cont = t.closest<HTMLElement>(".sentence-tree")!;
@@ -132,6 +149,19 @@ export const listeners: Listeners = {
           md.classList.remove("wait");
           chapter.classList.remove("hidden");
           saveChapter(0);
+        });
+      },
+    },
+    {
+      selector: "#citation-text",
+      callback: (_t: HTMLElement) => {
+        let txt = $<HTMLElement>("#citation-text")!;
+        post(`/chapter/update_citation_text`, {
+          txt: txt.innerHTML,
+        }).then((val) => {
+          if (!val["ok"]) {
+            alert(val);
+          }
         });
       },
     },
@@ -438,20 +468,27 @@ const saveChapter = (reload = 1) => {
 };
 
 const getChapter = (chapterId: string) => {
-  get(`/chapter/${chapterId}`).then((data) => {
+  post(`/chapter/${chapterId}`, { edit: userIsEditor }).then((data) => {
     if (data.ok) {
       setTitle(data["result"]["title"]);
       let main = $<HTMLElement>("#chapter-main");
       if (main) {
         main.innerHTML = `
+        ${
+          userIsEditor
+            ? `<div><span class="badge badge-small badge-info">Note: this is a <strong>pre-release version</strong> of the grammar. <span style="text-decoration:underline;" class="logout">Sign out</span> to see the current release.</span></div>`
+            : ""
+        }
         <h1 style="margin-top:4px; font-size:2rem; text-align:left;"><span id="path">${
-          data["result"]["path"]
+          data["result"]["path"] ?? ""
         }</span> <span ${
-          !isEmpty(user) ? `contenteditable="true"` : ``
-        } id="title" data-chapterid="${chapterId}">${data["result"]["title"]}
+          userIsEditor ? `contenteditable="true"` : ``
+        } id="title" data-chapterid="${chapterId}">${
+          data["result"]["title"] ?? "Coming soon!"
+        }
         </h1>
         ${
-          !isEmpty(user)
+          userIsEditor
             ? `<label for="chapter-parent">Parent chapter:</label>
         <div class="select"><select id="chapter-parent" name="parent"></select></div>
         <label for="chapter-number">Number:</label>
@@ -462,18 +499,18 @@ const getChapter = (chapterId: string) => {
             : ``
         }
         <section style="margin-top:18px;" id="chapter" class="${
-          !isEmpty(user) ? `chapter-edit` : ``
+          userIsEditor ? `chapter-edit` : ``
         }">
-            ${data["result"]["html"]}
+            ${data["result"]["html"] ?? ""}
         </section>
         <pre contenteditable="true" id="md" class="hidden ${
-          !isEmpty(user) ? `md-edit` : ``
+          userIsEditor ? `md-edit` : ``
         }" style="white-space:pre-wrap;word-wrap:break-word">${
           data["result"]["md"]
         }</pre>
         </section>
       `;
-        if (!isEmpty(user)) {
+        if (userIsEditor) {
           let seq = data["result"]["seq"];
           let chapterN = $<HTMLInputElement>("#chapter-number");
           if (chapterN) {
@@ -521,7 +558,7 @@ const getParentSelector = (chapterId: string, parentId: string) => {
 };
 
 const getSidebarMenu = () => {
-  return get(`/chapter/get_menu`).then((data) => {
+  return post(`/chapter/get_menu`, { edit: userIsEditor }).then((data) => {
     if (data["ok"]) {
       let htmlStr = "";
       menuCache = data["result"];
@@ -552,27 +589,53 @@ const getSidebarMenu = () => {
   });
 };
 
+const getCitationText = () => {
+  get(`/chapter/get_citation_text`).then((data) => {
+    if (data && data["ok"]) {
+      $<HTMLElement>("#citation-text")!.innerHTML = data["result"]["text"];
+    }
+  });
+};
+
 export default (params: { [key: string]: string }) => {
+  const dateObj = new Date();
   const getHtml = () => {
-    if (!isEmpty(user)) {
-      return `
+    return `
       <section style="grid-column: span 3">
         <h3 style="margin-top:10px;">Table of contents</h3>
         <div id="menu">${loader()}</div>
+        ${
+          userIsEditor
+            ? `<div style="padding:10px;margin-top:20px;" id="create-release" class="badge-info badge badge-small"><h3 style="margin-bottom:0px;text-align:left;">Publish this version</h3><input style="width:100px;" type="text" id="new-release-version" placeholder="Version n." />
+            <span id="publish-release" style="margin-left:3px; margin-top:10px;" class="button-small button button-green">Publish</span>
+            </div>`
+            : ""
+        }
+        <div style="margin-top:20px;padding:10px;" id="cite" class="badge-info badge badge-small">
+          <h3><strong>How to cite</strong></h3>
+          <p><span id="citation-text" ${
+            userIsEditor ? `contenteditable="true"` : ""
+          }>
+         </span> (Available online at https://papygreek.com/grammar, Accessed on ${
+           dateObj.getUTCFullYear() +
+           "-" +
+           dateObj.getUTCDate() +
+           "-" +
+           (dateObj.getUTCMonth() + 1)
+         }).
+        </div>
       </section>
       <section id="chapter-main" style="padding: 0 40px; grid-column: 4 / span 10">
         ${loader()}
       </section>
       <svg id="svg-canvas"></svg>
   `;
-    } else {
-      return `<section style="text-align:center;">Coming soon!</section>`;
-    }
   };
 
   const afterRender = () => {
     getSidebarMenu().then(() => {
       getChapter(params.id || "1");
+      getCitationText();
     });
   };
 

@@ -90,6 +90,11 @@ export const getUser = () => JSON.parse(localStorage.getItem("user") || "{}");
 export const haveUser = () =>
   !isEmpty(JSON.parse(localStorage.getItem("user") || "{}"));
 
+export const haveEditor = () => {
+  const user = getUser();
+  return !isEmpty(user) && user.user.level.includes("editor");
+};
+
 export const setTitle = (t: string) => {
   document.title = `PapyGreek | ${t || ""}`;
 };
