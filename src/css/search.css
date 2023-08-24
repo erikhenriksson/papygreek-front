@@ -434,3 +434,23 @@ li span.target {
 .search-list li {
   list-style-type: none;
 }
+
+.p-bar {
+  width: 100%;
+  position: relative;
+  display: block;
+}
+
+.p-bar-bar {
+  border-radius: 3px;
+  display: block;
+}
+
+.p-bar-text {
+  font-size: 10px;
+  padding-left: 2px;
+  position: absolute;
+  left: 0;
+  min-width: 50px;
+  top: 0;
+}

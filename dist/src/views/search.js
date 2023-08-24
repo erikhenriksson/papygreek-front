@@ -7,6 +7,23 @@ const sliderChange = (t) => {
     const handle = t.dataset.handle;
     slider.noUiSlider.setHandle(handle, t.value);
 };
+const getColor = (value) => {
+    //value from 0 to 1
+    var hue = ((value / 100) * 120).toString(10);
+    return ["hsl(", hue, ",100%,50%)"].join("");
+};
+const percentageCircle = (val) => {
+    if (!val || !val.length) {
+        return "";
+    }
+    else {
+        const perc = Math.round(val * 100);
+        const color = perc == 100 ? "dodgerblue" : getColor(perc);
+        return perc != 100
+            ? `<span class="p-bar"><span class="p-bar-bar" style='color:transparent;background-color:${color};width:${perc}%'>-</span><span style="color: black" class="p-bar-text">${perc}%</span></span> `
+            : `<span class="p-bar"><span class="p-bar-bar" style="background:lightgrey; font-variant:small-caps;font-size:9px;text-align:center;">manual</span></span>`;
+    }
+};
 /*
 const changeVariationSearchMode = () => {
   let isVariationSearch = false;
@@ -195,8 +212,8 @@ export const listeners = {
                         return d[index];
                     }));
                     const decimals = index == 3 ? 4 : 0;
-                    console.log(dateFreq);
-                    console.log(maxVal);
+                    //console.log(dateFreq);
+                    //console.log(maxVal);
                     return `
           <div class="barchart-Wrapper">
             <div class="barchart-TimeCol">
@@ -275,9 +292,11 @@ export const listeners = {
                                         .join(", "),
                                     item.orig_lemma || "",
                                     item.orig_postag || "",
+                                    percentageCircle(item.orig_postag_confidence) || "",
                                     item.orig_relation || "",
                                     item.reg_lemma || "",
                                     item.reg_postag || "",
+                                    percentageCircle(item.reg_postag_confidence) || "",
                                     item.reg_relation || "",
                                     item.date_not_before || "",
                                     item.date_not_after || "",
@@ -391,9 +410,11 @@ const datatableOptions = {
             "Rdgs",
             "O Lemma",
             "O Postag",
+            "Conf.",
             "O Rel",
             "R Lemma",
             "R Postag",
+            "Conf.",
             "R Rel",
             "Y >",
             "< Y",
