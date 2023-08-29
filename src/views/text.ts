@@ -59,13 +59,39 @@ export default (params: Dict<string>) => {
   };
 
   const render = () => {
-    $("h1")!.innerHTML = docCache.name;
+    $("h1")!.innerHTML = docCache.name.split(".xml")[0];
     $("h1")!.dataset.textid = docCache.id;
     //document.querySelector('#temp').innerHTML = `python3 run.py try_to_merge ${data.result.name} <br> python3 run.py flag_ignore_and_merge ${data.result.name} ${params.id}`
     setTitle(docCache.name);
-    $("#document-meta")!.innerHTML = `
-      [Metadata placeholder]
-    `;
+    $("#document-meta")!.innerHTML = `${
+      docCache.place_name
+        ? `<span class="badge badge-small badge-yellow">Place: ${docCache.place_name}</span>`
+        : ""
+    } ${
+      (docCache.date_not_before || docCache.date_not_after) &&
+      docCache.date_not_before != docCache.date_not_after
+        ? `<span class="badge badge-small badge-blue">Date: ${
+            docCache.date_not_before || "?"
+          } – ${docCache.date_not_after || "?"}</span>`
+        : ""
+    } ${
+      (docCache.date_not_before || docCache.date_not_after) &&
+      docCache.date_not_before == docCache.date_not_after
+        ? `<span class="badge badge-small badge-blue">Date: ${
+            docCache.date_not_before
+              ? docCache.date_not_before
+              : docCache.date_not_after
+          }</span>`
+        : ""
+    } ${
+      docCache.tm
+        ? `<span class="badge badge-small badge-red">TM: ${docCache.tm}</span>`
+        : ""
+    } ${
+      docCache.hgv
+        ? `<span class="badge badge-small badge-grey">HGV: ${docCache.hgv}</span>`
+        : ""
+    }`;
 
     tabMap[tab](docCache, user).then((data: string) => {
       $<HTMLElement>("#main")!.innerHTML = data;
