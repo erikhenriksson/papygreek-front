@@ -462,3 +462,7 @@ li span.target {
 #sentence-tree .enlarge-button {
   display: none;
 }
+
+.search #datatable td:nth-child(16) {
+  font-size: 10px;
+}
