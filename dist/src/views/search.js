@@ -299,17 +299,17 @@ export const listeners = {
                                     item.reg_relation || "",
                                     item.date_not_before || "",
                                     item.date_not_after || "",
+                                    item.place_name || "",
                                     //item.regularization || "",
                                 ];
                             });
-                            console.log(data);
                             dt.classList.add("d-block");
                             dt.classList.remove("d-none");
                             window.datatable.insert({ data: result });
                         }
                     }
                     else {
-                        msg.innerHTML = data["detail"];
+                        msg.innerHTML = data;
                         msg.classList.remove("hidden");
                         $("#datebars")?.classList.add("d-none");
                     }
@@ -418,7 +418,7 @@ const datatableOptions = {
             "R Rel",
             "Y >",
             "< Y",
-            //"V",
+            "Place",
         ],
     },
     template: (options, dom) => `
