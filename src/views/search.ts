@@ -346,6 +346,7 @@ export const listeners: Listeners = {
                   //item.regularization || "",
                 ];
               });
+              console.log(data);
               dt.classList.add("d-block");
               dt.classList.remove("d-none");
               window.datatable.insert({ data: result });
