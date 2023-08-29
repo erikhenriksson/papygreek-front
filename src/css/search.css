@@ -454,3 +454,11 @@ li span.target {
   min-width: 50px;
   top: 0;
 }
+
+#sentence-tree .sentence-tree {
+  width: 768px;
+}
+
+#sentence-tree .enlarge-button {
+  display: none;
+}

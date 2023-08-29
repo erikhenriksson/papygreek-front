@@ -33,6 +33,22 @@
   border: 1px solid silver;
 }
 
+#chapter table {
+  border-top: 2px solid black;
+  border-bottom: 2px solid black;
+  border-collapse: collapse;
+  margin: 20px 0;
+  width: 100%;
+}
+
+#chapter td {
+  padding: 2px 6px !important;
+}
+
+#chapter tr.header {
+  border-bottom: 1px solid;
+}
+
 .chapter-edit:empty {
   min-height: 30px;
   border: 1px dotted silver;

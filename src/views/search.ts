@@ -6,12 +6,15 @@ import {
   buttonDone,
   buttonWait,
   isEmpty,
+  formatTrees,
 } from "../utils.js";
 import { get, post } from "../api.js";
 import { Dict, ApiResult, Listeners } from "../types.js";
 
 import "https://cdn.jsdelivr.net/npm/simple-datatables@7";
 import "https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js";
+
+window.cys = {};
 
 const sliderChange = (t: HTMLInputElement) => {
   const slider = document.getElementById("slider") as any;
@@ -87,15 +90,14 @@ export const listeners: Listeners = {
         };
         post(`/search/get_sentence_tree`, queryData).then((data: ApiResult) => {
           if (data && data.ok) {
-            /*
-            let json = val["result"];
-            let root = document.querySelector<HTMLElement>("#tf-tree2 > ul")!;
-      
-            root.innerHTML = jsonToHtml(json, "", t.dataset.tokenid || "");
-            document
-              .querySelector<HTMLElement>("#sentence-tree")!
-              .classList.remove("d-none");
-            */
+            const cont = document.querySelector<HTMLElement>("#sentence-tree")!;
+            const contInner = document.querySelector<HTMLElement>(
+              "#sentence-tree-content"
+            )!;
+            console.log(data);
+            contInner.innerHTML = data["result"];
+            cont.classList.remove("d-none");
+            formatTrees();
           }
         });
       },
@@ -221,6 +223,7 @@ export const listeners: Listeners = {
     {
       selector: "#tree-search",
       callback: () => {
+        window.cys = {};
         const getDateGraph = (
           dateFreq: Dict<any>,
           index: number,
@@ -291,7 +294,8 @@ export const listeners: Listeners = {
         let dt = $(".datatable-wrapper")!;
         dt.classList.add("d-none");
         dt.classList.remove("d-block");
-        $("#datebars")?.classList.remove("d-none");
+        $("#datebars")?.classList.add("d-none");
+
         post(`/search/`, getSearch()).then((data) => {
           let layer = $<HTMLInputElement>('input[name="layer"]:checked')!.value;
 
@@ -299,7 +303,6 @@ export const listeners: Listeners = {
             const resultData = data.result.data;
             if (!resultData.length) {
               info.innerHTML = `No results`;
-              $("#datebars")?.classList.add("d-none");
               btn.innerHTML = "Search";
               return;
             }
@@ -315,7 +318,7 @@ export const listeners: Listeners = {
               2,
               ""
             );
-
+            $("#datebars")?.classList.remove("d-none");
             if (resultData.length > 10000) {
               info.innerHTML = `${resultData.length} tokens. (Upper limit for tabulation is 10000.)`;
             } else {
@@ -340,7 +343,7 @@ export const listeners: Listeners = {
                   item.reg_relation || "",
                   item.date_not_before || "",
                   item.date_not_after || "",
-                  item.regularization || "",
+                  //item.regularization || "",
                 ];
               });
               dt.classList.add("d-block");
@@ -472,7 +475,7 @@ const datatableOptions = {
       "R Rel",
       "Y >",
       "< Y",
-      "V",
+      //"V",
     ],
   },
   template: (options: Dict<any>, dom: Dict<any>) => `
@@ -893,7 +896,7 @@ export default (params: Dict<string>) => {
       <div id="sentence-tree" class="modal d-none">
           <div class="tf-tree tf-result modal-content" id="tf-tree2">
             <a href="#" title="Close" class="modal-close"></a>
-            <ul></ul>
+            <div id="sentence-tree-content"></div>
           </div>
       </div>
       <div id="overlay" class="d-none"></div>

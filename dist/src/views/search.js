@@ -1,7 +1,8 @@
-import { setTitle, getUser, textTypes, aowRoles, buttonDone, buttonWait, isEmpty, } from "../utils.js";
+import { setTitle, getUser, textTypes, aowRoles, buttonDone, buttonWait, isEmpty, formatTrees, } from "../utils.js";
 import { get, post } from "../api.js";
 import "https://cdn.jsdelivr.net/npm/simple-datatables@7";
 import "https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.0/nouislider.min.js";
+window.cys = {};
 const sliderChange = (t) => {
     const slider = document.getElementById("slider");
     const handle = t.dataset.handle;
@@ -74,15 +75,12 @@ export const listeners = {
                 };
                 post(`/search/get_sentence_tree`, queryData).then((data) => {
                     if (data && data.ok) {
-                        /*
-                        let json = val["result"];
-                        let root = document.querySelector<HTMLElement>("#tf-tree2 > ul")!;
-                  
-                        root.innerHTML = jsonToHtml(json, "", t.dataset.tokenid || "");
-                        document
-                          .querySelector<HTMLElement>("#sentence-tree")!
-                          .classList.remove("d-none");
-                        */
+                        const cont = document.querySelector("#sentence-tree");
+                        const contInner = document.querySelector("#sentence-tree-content");
+                        console.log(data);
+                        contInner.innerHTML = data["result"];
+                        cont.classList.remove("d-none");
+                        formatTrees();
                     }
                 });
             },
@@ -207,6 +205,7 @@ export const listeners = {
         {
             selector: "#tree-search",
             callback: () => {
+                window.cys = {};
                 const getDateGraph = (dateFreq, index, suffix) => {
                     const maxVal = Math.max(...dateFreq.map((d) => {
                         return d[index];
@@ -261,20 +260,20 @@ export const listeners = {
                 let dt = $(".datatable-wrapper");
                 dt.classList.add("d-none");
                 dt.classList.remove("d-block");
-                $("#datebars")?.classList.remove("d-none");
+                $("#datebars")?.classList.add("d-none");
                 post(`/search/`, getSearch()).then((data) => {
                     let layer = $('input[name="layer"]:checked').value;
                     if (data && data.ok) {
                         const resultData = data.result.data;
                         if (!resultData.length) {
                             info.innerHTML = `No results`;
-                            $("#datebars")?.classList.add("d-none");
                             btn.innerHTML = "Search";
                             return;
                         }
                         const dateFreq = data.result.date_frequencies;
                         $("#relative-frequencies").innerHTML = getDateGraph(dateFreq, 3, "%");
                         $("#absolute-frequencies").innerHTML = getDateGraph(dateFreq, 2, "");
+                        $("#datebars")?.classList.remove("d-none");
                         if (resultData.length > 10000) {
                             info.innerHTML = `${resultData.length} tokens. (Upper limit for tabulation is 10000.)`;
                         }
@@ -300,7 +299,7 @@ export const listeners = {
                                     item.reg_relation || "",
                                     item.date_not_before || "",
                                     item.date_not_after || "",
-                                    item.regularization || "",
+                                    //item.regularization || "",
                                 ];
                             });
                             dt.classList.add("d-block");
@@ -418,7 +417,7 @@ const datatableOptions = {
             "R Rel",
             "Y >",
             "< Y",
-            "V",
+            //"V",
         ],
     },
     template: (options, dom) => `
@@ -800,7 +799,7 @@ export default (params) => {
       <div id="sentence-tree" class="modal d-none">
           <div class="tf-tree tf-result modal-content" id="tf-tree2">
             <a href="#" title="Close" class="modal-close"></a>
-            <ul></ul>
+            <div id="sentence-tree-content"></div>
           </div>
       </div>
       <div id="overlay" class="d-none"></div>

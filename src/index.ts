@@ -11,6 +11,7 @@ declare global {
     XMLParser: any;
     elk: any;
     module: any;
+    cys: any;
   }
 }
 

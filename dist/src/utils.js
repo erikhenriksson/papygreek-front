@@ -19,6 +19,30 @@ export const listeners = {
                 });
             },
         },
+        {
+            selector: ".enlarge-button.maximize",
+            callback: (t) => {
+                const cont = t.closest(".sentence-tree");
+                cont.classList.add("enlarged");
+                t.classList.add("d-none");
+                cont.querySelector(".minimize")?.classList.remove("d-none");
+                setTimeout(() => {
+                    resizeCy(cont.dataset.treeid || "");
+                }, 300);
+            },
+        },
+        {
+            selector: ".enlarge-button.minimize",
+            callback: (t) => {
+                const cont = t.closest(".sentence-tree");
+                cont.classList.remove("enlarged");
+                t.classList.add("d-none");
+                cont.querySelector(".maximize")?.classList.remove("d-none");
+                setTimeout(() => {
+                    resizeCy(cont.dataset.treeid || "");
+                }, 300);
+            },
+        },
     ],
     keyup: [
         {
@@ -370,4 +394,282 @@ export const insertTextAtSelection = (div, txt) => {
     range.setEnd(div.childNodes[0], before + txt.length);
     sel.addRange(range);
     console.log(div.innerHTML);
+};
+export const formatTrees = () => {
+    const classMapper = (postag) => {
+        const colorMap = {
+            l: "article",
+            n: "noun",
+            a: "adjective",
+            p: "pronoun",
+            v: "verb",
+            d: "adverb",
+            r: "preposition",
+            c: "conjunction",
+            i: "interjection",
+            u: "punctuation",
+            x: "irregular",
+        };
+        try {
+            return colorMap[postag[0]];
+        }
+        catch {
+            return "black";
+        }
+    };
+    $$(".sentence-tree").forEach((itm) => {
+        const treeId = itm.dataset.treeid;
+        itm.innerHTML =
+            "<span class='enlarge-button maximize'></span><span class='enlarge-button minimize d-none'></span><div style='height:100%;width:100%;overflow:hidden;' class='tree-container'></div>";
+        let treeCont = itm.querySelector(".tree-container");
+        const error = "<span class='info'>[Failed to load sentence tree]</span>";
+        let json = itm.dataset.json;
+        if (json) {
+            const q = JSON.parse(window.atob(json));
+            let elements = [
+                {
+                    data: { id: "node0", label: "" },
+                    classes: "parent",
+                },
+                {
+                    data: { id: "lab0", label: "[ROOT]", parent: "node0" },
+                    classes: "child",
+                },
+            ];
+            for (let n of q["result"]) {
+                // Parent node shows the relation
+                elements.push({
+                    data: {
+                        id: "node" + n["n"],
+                        label: n["relation"],
+                    },
+                    classes: "parent",
+                });
+                // Child node shows the form
+                elements.push({
+                    data: {
+                        id: "lab" + n["n"],
+                        parent: "node" + n["n"],
+                        label: n["form"],
+                    },
+                    classes: [classMapper(n["postag"]), "child"],
+                });
+            }
+            for (let n of q["result"]) {
+                let head = !n["head"] ? "0" : n["head"];
+                elements.push({
+                    data: {
+                        id: `edge${head},${n["n"]}`,
+                        source: "node" + head,
+                        target: "node" + n["n"],
+                        label: n["relation"],
+                    },
+                });
+            }
+            const layout = {
+                name: "elk",
+                elk: {
+                    algorithm: "layered",
+                    "elk.direction": "DOWN",
+                    "elk.layered.crossingMinimization.forceNodeModelOrder": true,
+                },
+                nodeDimensionsIncludeLabels: true,
+                spacingFactor: 0.9,
+            };
+            // @ts-ignore
+            window.cys[treeId] = cytoscape({
+                container: treeCont,
+                autoungrabify: true,
+                autounselectify: true,
+                panningEnabled: true,
+                elements: elements,
+                pixelRatio: "auto",
+                zoom: 1,
+                fit: true,
+                padding: 30,
+                layout: layout,
+                style: [
+                    {
+                        selector: ".parent",
+                        css: {
+                            color: "#555",
+                            content: "data(label)",
+                            "text-valign": "top",
+                            "text-halign": "center",
+                            "border-color": "#fff",
+                            "background-color": "#fff",
+                            "text-border-style": "solid",
+                            "text-border-opacity": 1,
+                            "text-border-width": "3px",
+                            "text-border-color": "#fff",
+                            "background-opacity": "1",
+                            "border-opacity": "0",
+                            "text-outline-color": "#fff",
+                            "text-background-opacity": 1,
+                            "text-background-color": "#ffffff",
+                            "padding-top": "0px",
+                            "padding-bottom": "0px",
+                            "padding-left": "0px",
+                            "padding-right": "0px",
+                            "font-size": "11px",
+                            shape: "roundrectangle",
+                            "z-index": 1,
+                            "z-compound-depth": "top",
+                        },
+                    },
+                    {
+                        selector: ".child",
+                        css: {
+                            content: "data(label)",
+                            "text-valign": "center",
+                            "text-halign": "center",
+                            "background-opacity": "0",
+                            "z-index": 2,
+                            "z-compound-depth": "top",
+                            "padding-top": "0px",
+                            "padding-bottom": "0px",
+                            "padding-left": "0px",
+                            "padding-right": "0px",
+                        },
+                    },
+                    {
+                        selector: "edge",
+                        css: {
+                            width: 1,
+                            "line-color": "#333",
+                            "curve-style": "unbundled-bezier",
+                            "control-point-distances": (edge) => edge.data("distances") || [0, 0],
+                            "control-point-weights": [0.25, 0.75],
+                            "z-index": 9,
+                        },
+                    },
+                    {
+                        selector: ".verb",
+                        css: {
+                            color: "red",
+                        },
+                    },
+                    {
+                        selector: ".pronoun",
+                        css: {
+                            color: "purple",
+                        },
+                    },
+                    {
+                        selector: ".adverb",
+                        css: {
+                            color: "darkorange",
+                        },
+                    },
+                    {
+                        selector: ".preposition",
+                        css: {
+                            color: "green",
+                        },
+                    },
+                    {
+                        selector: ".conjunction",
+                        css: {
+                            color: "deeppink",
+                        },
+                    },
+                    {
+                        selector: ".interjection",
+                        css: {
+                            color: "gold",
+                        },
+                    },
+                    {
+                        selector: ".irregular",
+                        css: {
+                            color: "gray",
+                        },
+                    },
+                    {
+                        selector: ".adjective",
+                        css: {
+                            color: "blue",
+                        },
+                    },
+                    {
+                        selector: ".article",
+                        css: {
+                            color: "lightblue",
+                        },
+                    },
+                    {
+                        selector: ".noun",
+                        css: {
+                            color: "#2b727c",
+                        },
+                    },
+                    {
+                        selector: ".hl-node",
+                        style: { "background-color": "silver" },
+                    },
+                    {
+                        selector: ".hl-node",
+                        style: {
+                            "text-margin-y": "-2px",
+                            "padding-top": "1px",
+                            "padding-bottom": "1px",
+                            "padding-left": "5px",
+                            "padding-right": "5px",
+                        },
+                    },
+                    {
+                        selector: ".hl-edge",
+                        style: { width: 3 },
+                    },
+                ],
+            });
+            const adjustEdgeCurve = function (edge) {
+                const { x: x0, y: y0 } = edge.source().position();
+                const { x: x1, y: y1 } = edge.target().position();
+                const x = x1 - x0;
+                const y = y1 - y0;
+                const z = Math.sqrt(x * x + y * y);
+                const costheta = x / z;
+                edge.style("control-point-distances", [-0.1 * y * costheta]);
+                edge.style("control-point-weights", [0.5]);
+            };
+            window.cys[treeId].ready(() => {
+                window.cys[treeId].edges().forEach(adjustEdgeCurve);
+            });
+            /*
+            cy.on("mouseover", "node", function (e: any) {
+              var sel = e.target!;
+              cy.elements()
+                .difference(sel.outgoers())
+                .not(sel)
+                .addClass("semitransp");
+              sel.addClass("highlight").outgoers().addClass("highlight");
+            });
+            */
+            //cy.edges("[id='edge17']").addClass("highlight");
+            for (let id of q["highlight_nodes"].split(",")) {
+                window.cys[treeId].nodes(`[id='node${id}']`).addClass("hl-node");
+            }
+            for (let id of q["highlight_edges"].split(",")) {
+                let ids = id.split("/");
+                window.cys[treeId]
+                    .edges(`[id='edge${ids[0]},${ids[1]}']`)
+                    .addClass("hl-edge");
+            }
+        }
+        else {
+            itm.innerHTML = error;
+        }
+    });
+};
+export const resizeCy = (cy) => {
+    window.cys[cy].ready(() => {
+        window.cys[cy].animate({
+            fit: {
+                padding: 30,
+            },
+            easing: "ease-in-out-quad",
+            duration: 500,
+        });
+    });
 };
