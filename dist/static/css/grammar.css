@@ -161,3 +161,15 @@
 #menu .main-level.current .menu-span {
   display: block !important;
 }
+
+#citation-modal .column {
+  float: left;
+  width: 50%;
+}
+
+/* Clear floats after the columns */
+#citation-modal .row:after {
+  content: "";
+  display: table;
+  clear: both;
+}

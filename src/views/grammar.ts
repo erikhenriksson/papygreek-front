@@ -16,6 +16,12 @@ const userIsEditor = haveEditor();
 export const listeners: Listeners = {
   click: [
     {
+      selector: ".open-citation-modal",
+      callback: () => {
+        $<HTMLElement>("#citation-modal")!.classList.remove("d-none");
+      },
+    },
+    {
       selector: ".chapter-link",
       callback: (t: HTMLElement) => {
         const chapterId = t.dataset.chapterid || "";
@@ -137,7 +143,7 @@ const saveChapter = (reload = 1) => {
   const chapterNumberContainer = $("#chapter-number") as HTMLInputElement;
   const chapterParentContainer = $("#chapter-parent") as HTMLInputElement;
   let saveBtn = $("#save-chapter") as HTMLElement;
-
+  buttonWait(saveBtn);
   post(`/chapter/save`, {
     md: $("#md")!.innerHTML,
     html: $("#chapter")!.innerHTML,
@@ -145,6 +151,7 @@ const saveChapter = (reload = 1) => {
     title: title.innerHTML,
     seq: chapterNumberContainer ? chapterNumberContainer.value : null,
     parent_id: chapterParentContainer ? chapterParentContainer.value : null,
+    author: $<HTMLInputElement>("#chapter-author")!.value,
   }).then((val) => {
     if (val["ok"]) {
       buttonDone(saveBtn);
@@ -165,12 +172,13 @@ const getChapter = (chapterId: string) => {
       let main = $<HTMLElement>("#chapter-main");
       if (main) {
         main.innerHTML = `
+
         ${
           userIsEditor
             ? `<div><span class="badge badge-small badge-info">Note: this is a <strong>pre-release version</strong> of the grammar. <span style="text-decoration:underline;" class="logout">Sign out</span> to see the current release.</span></div>`
             : ""
         }
-        <h1 style="margin-top:4px; font-size:2rem; text-align:left;"><span id="path">${
+        <h1 style="position:relative; margin-top:4px; font-size:2rem; text-align:left;">        <span style="position:absolute; right:0; bottom:0;" class="button button-small button-outline open-citation-modal">❞ Cite</span><span id="path">${
           data["result"]["path"] ?? ""
         }</span> <span ${
           userIsEditor ? `contenteditable="true"` : ``
@@ -184,12 +192,13 @@ const getChapter = (chapterId: string) => {
         <div class="select"><select id="chapter-parent" name="parent"></select></div>
         <label for="chapter-number">Number:</label>
         <input name="chapter-number" id="chapter-number" type="text"></input>
+        <p style="margin:10px 0"><label style="margin-right:2px" for="chapter-author">Main author(s):</label><input style="width:280px" name="chapter-author" id="chapter-author" type="text"></input></p>
         <p style="margin:10px 0;"><span class="button" id="save-chapter">Save</span>
         <span class="button" data-chapterid="${chapterId}" id="delete-chapter">Delete</span>
         <span class="button" id="add-chapter">New chapter</span></p>`
             : ``
         }
-        <section style="margin-top:18px;" id="chapter" class="${
+        <section style="margin-top:18px;position:relative;" id="chapter" class="${
           userIsEditor ? `chapter-edit` : ``
         }">
             ${data["result"]["html"] ?? ""}
@@ -199,6 +208,7 @@ const getChapter = (chapterId: string) => {
         }" style="white-space:pre-wrap;word-wrap:break-word">${
           data["result"]["md"]
         }</pre>
+
         </section>
       `;
         if (userIsEditor) {
@@ -207,6 +217,9 @@ const getChapter = (chapterId: string) => {
           if (chapterN) {
             chapterN.value = seq;
           }
+
+          $<HTMLInputElement>("#chapter-author")!.value =
+            data["result"]["author"];
         }
 
         $$(".menu-span").forEach((itm) => {
@@ -280,16 +293,39 @@ const getSidebarMenu = () => {
   });
 };
 
-const getCitationText = () => {
-  get(`/chapter/get_citation_text`).then((data) => {
+const getGrammarVersion = (chapterId: string) => {
+  get(`/chapter/get_grammar_version/${chapterId}`).then((data) => {
     if (data && data["ok"]) {
-      $<HTMLElement>("#citation-text")!.innerHTML = data["result"]["text"];
+      $$(".grammar-version").forEach((el) => {
+        el.innerHTML = data["result"]["version"];
+      });
+      $$(".grammar-year").forEach((el) => {
+        el.innerHTML = data["result"]["year"];
+      });
+      $$(".grammar-title").forEach((el) => {
+        el.innerHTML = data["result"]["title"];
+      });
+
+      if (data["result"]["author"]) {
+        $$(".grammar-author").forEach((el) => {
+          el.innerHTML = data["result"]["author"];
+        });
+      } else {
+        $<HTMLElement>(".chapter-p")!.innerHTML =
+          "<span class='info'>This chapter lacks a unique reference; please cite the full book.</span>";
+      }
     }
   });
 };
 
 export default (params: { [key: string]: string }) => {
   const dateObj = new Date();
+  const curDate =
+    dateObj.getUTCFullYear() +
+    "-" +
+    dateObj.getUTCDate() +
+    "-" +
+    (dateObj.getUTCMonth() + 1);
   const getHtml = () => {
     return `
       <section style="grid-column: span 3">
@@ -302,31 +338,34 @@ export default (params: { [key: string]: string }) => {
             </div>`
             : ""
         }
-        <div style="margin-top:20px;padding:10px;" id="cite" class="badge-info badge badge-small">
-          <h3><strong>How to cite</strong></h3>
-          <p><span id="citation-text" ${
-            userIsEditor ? `contenteditable="true"` : ""
-          }>
-         </span> (Available online at https://papygreek.com/grammar, Accessed on ${
-           dateObj.getUTCFullYear() +
-           "-" +
-           dateObj.getUTCDate() +
-           "-" +
-           (dateObj.getUTCMonth() + 1)
-         }).
-        </div>
       </section>
       <section id="chapter-main" style="padding: 0 40px; grid-column: 4 / span 10">
         ${loader()}
       </section>
       <svg id="svg-canvas"></svg>
+      <div id="citation-modal" class="d-none modal">
+          <div class="modal-content">
+          <h3 class="centered bold">How to cite the grammar</h3><p></p>
+            <div class="row">
+              <div class="column chapter-column"><h3 class="centered">This chapter</h3><p></p>
+              <p class="chapter-p" style="padding:10px; font-size:13px;"><span class="grammar-author"></span>. <span class="grammar-year"></span>. <span class="grammar-title"></span>. In: Vierros, Marja, Sonja Dahlgren, Erik Henriksson, Polina Yordanova, and Sari Kock (eds). Digital Grammar of Greek Documentary Papyri. (<span class="grammar-version"></span>). Zenodo. <span style="word-break:break-all">https://doi.org/10.5281/zenodo.XXXX (Available online at https://papygreek.com/grammar, Accessed on ${curDate})</span>.
+              </p>
+              </div>
+              <div class="column work-column"><h3 class="centered">The general work</h3><p></p>
+                <p style="padding:10px;font-size:13px;">Vierros, Marja, Sonja Dahlgren, Erik Henriksson, Polina Yordanova, and Sari Kock (eds). <span class="grammar-year"></span>. Digital Grammar of Greek Documentary Papyri. (<span class="grammar-version"></span>). Zenodo. <span style="word-break:break-all">https://doi.org/10.5281/zenodo.XXXX (Available online at https://papygreek.com/grammar, Accessed on ${curDate})</span>.
+                </p>
+              </div>
+            </div>
+            <span class="button button-grey button-small modal-close"></span>
+          </div>
+      </div>
   `;
   };
 
   const afterRender = () => {
     getSidebarMenu().then(() => {
       getChapter(params.id || "1");
-      getCitationText();
+      getGrammarVersion(params.id || "1");
     });
   };
 
