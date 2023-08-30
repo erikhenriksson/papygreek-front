@@ -1,17 +1,17 @@
 import {
   setTitle,
   centeredLoader,
-  getUser,
   activateTab,
-  isEmpty,
   buttonWait,
   buttonDone,
   downloadAsFile,
+  haveEditor,
 } from "../utils.js";
 import { get, getFile } from "../api.js";
 import { ApiResult, Listeners } from "../types.js";
 
 let cache: string;
+const userIsEditor = haveEditor();
 
 export const listeners: Listeners = {
   click: [
@@ -46,21 +46,19 @@ export default (params: { [key: string]: string }) => {
     treebankType = params.type;
   }
 
-  let user = getUser();
-
   const getTreebanks = () => {
     let container = $("#main")!;
     let resultHTML = "";
     const treebankTypeQuery = urlMap[treebankType || "finalized"];
     get(
-      !isEmpty(user) ? `/texts/status/${treebankTypeQuery}` : `/texts/approved`
+      userIsEditor ? `/texts/status/${treebankTypeQuery}` : `/texts/approved`
     ).then((data: ApiResult) => {
       if (data && data.ok && data.result.length) {
         console.log(data);
         data.result.forEach((el: { [key: string]: string | number }) => {
           let status = "";
           let style = "";
-          if (!isEmpty(user)) {
+          if (userIsEditor) {
             if (treebankTypeQuery == "3") {
               if (el.orig_status != 3) {
                 status = "O missing";
@@ -105,7 +103,7 @@ export default (params: { [key: string]: string }) => {
       const containerVal = `
         <section class="info">${data.result.length} texts</section>
         ${
-          !isEmpty(user) && treebankTypeQuery == "3"
+          userIsEditor && treebankTypeQuery == "3"
             ? `<section class="centered"><span class="export-finalized button button-small">Export as XML</span></section>`
             : ""
         }
@@ -125,7 +123,7 @@ export default (params: { [key: string]: string }) => {
       <section class="tabs">
         <a data-tab="" href="/treebanks">Finalized</a>
         ${
-          !isEmpty(user)
+          userIsEditor
             ? `
               <a data-nocache="1" data-tab="submitted" href="/treebanks/submitted">Submitted</a>
               <a data-nocache="1" data-tab="active" href="/treebanks/active">Active</a>

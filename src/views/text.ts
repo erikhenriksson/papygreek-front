@@ -2,8 +2,7 @@ import {
   setTitle,
   loader,
   activateTab,
-  getUser,
-  isEmpty,
+  haveEditor,
   centeredLoader,
 } from "../utils.js";
 
@@ -20,6 +19,8 @@ import getTreebank from "./text/treebank.js";
 import getArchive from "./text/archive.js";
 
 let docCache: any;
+
+const userIsEditor = haveEditor();
 
 export default (params: Dict<string>) => {
   const tabMap: Dict<any> = {
@@ -39,8 +40,6 @@ export default (params: Dict<string>) => {
   if ("tab" in params) {
     tab = params.tab;
   }
-
-  let user = getUser();
 
   const getTab = () => {
     const refresh = true;
@@ -93,7 +92,7 @@ export default (params: Dict<string>) => {
         : ""
     }`;
 
-    tabMap[tab](docCache, user).then((data: string) => {
+    tabMap[tab](docCache, userIsEditor).then((data: string) => {
       $<HTMLElement>("#main")!.innerHTML = data;
     });
   };
@@ -112,7 +111,7 @@ export default (params: Dict<string>) => {
             params.id
           }/arethusa"><span style="position:relative; top:2px; display:inline-block; width:80px; height:14px; background-image:url('/static/img/arethsa.png'); background-size: contain; background-repeat: no-repeat"></span></a>
           ${
-            !isEmpty(user)
+            userIsEditor
               ? `
           <a data-tab="editor" href="/text/${params.id}/editor">Edit treebank</a>
           `
@@ -121,7 +120,7 @@ export default (params: Dict<string>) => {
           <a data-tab="metadata" href="/text/${params.id}/metadata">Metadata</a>
           <a data-tab="workflow" href="/text/${params.id}/workflow">Workflow</a>
           ${
-            !isEmpty(user)
+            userIsEditor
               ? `<a data-tab="archive" href="/text/${params.id}/archive">Archive</a>`
               : ""
           }

@@ -1,4 +1,4 @@
-import { setTitle, loader, activateTab, getUser, isEmpty, centeredLoader, } from "../utils.js";
+import { setTitle, loader, activateTab, haveEditor, centeredLoader, } from "../utils.js";
 import { get } from "../api.js";
 import getText from "./text/view.js";
 import getEditor from "./text/editor.js";
@@ -9,6 +9,7 @@ import getXml from "./text/xml.js";
 import getTreebank from "./text/treebank.js";
 import getArchive from "./text/archive.js";
 let docCache;
+const userIsEditor = haveEditor();
 export default (params) => {
     const tabMap = {
         "": getText,
@@ -25,7 +26,6 @@ export default (params) => {
     if ("tab" in params) {
         tab = params.tab;
     }
-    let user = getUser();
     const getTab = () => {
         const refresh = true;
         if (docCache && !refresh) {
@@ -63,7 +63,7 @@ export default (params) => {
             : ""} ${docCache.hgv
             ? `<span class="badge badge-small badge-grey">HGV: ${docCache.hgv}</span>`
             : ""}`;
-        tabMap[tab](docCache, user).then((data) => {
+        tabMap[tab](docCache, userIsEditor).then((data) => {
             $("#main").innerHTML = data;
         });
     };
@@ -76,14 +76,14 @@ export default (params) => {
           <a data-tab="xml" href="/text/${params.id}/xml">Source XML</a>
           <a data-tab="treebank" href="/text/${params.id}/treebank">Treebank XML</a>
           <a data-tab="arethusa" href="/text/${params.id}/arethusa"><span style="position:relative; top:2px; display:inline-block; width:80px; height:14px; background-image:url('/static/img/arethsa.png'); background-size: contain; background-repeat: no-repeat"></span></a>
-          ${!isEmpty(user)
+          ${userIsEditor
             ? `
           <a data-tab="editor" href="/text/${params.id}/editor">Edit treebank</a>
           `
             : ""}
           <a data-tab="metadata" href="/text/${params.id}/metadata">Metadata</a>
           <a data-tab="workflow" href="/text/${params.id}/workflow">Workflow</a>
-          ${!isEmpty(user)
+          ${userIsEditor
             ? `<a data-tab="archive" href="/text/${params.id}/archive">Archive</a>`
             : ""}
       </section>

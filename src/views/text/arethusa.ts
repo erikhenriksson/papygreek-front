@@ -1,4 +1,4 @@
-import { getUser, isEmpty } from "../../utils.js";
+import { haveEditor } from "../../utils.js";
 import { Listeners } from "../../types.js";
 
 export const listeners: Listeners = {
@@ -23,7 +23,7 @@ export const listeners: Listeners = {
       selector: "[name='layer-arethusa']",
       callback: (t: HTMLInputElement) => {
         const textId = $("h1")?.dataset.textid;
-        const src = getArethusaUrl(textId || "", t.value, getUser());
+        const src = getArethusaUrl(textId || "", t.value, haveEditor());
         //console.log(src);
         $<HTMLIFrameElement>("#arethusa")!.src = src;
       },
@@ -31,9 +31,13 @@ export const listeners: Listeners = {
   ],
 };
 
-export const getArethusaUrl = (docId: string, layer: string, user: any) => {
+export const getArethusaUrl = (
+  docId: string,
+  layer: string,
+  userIsEditor: any
+) => {
   let url;
-  if (!isEmpty(user) && user.user.level.length > 1) {
+  if (userIsEditor > 1) {
     url = cnf.arethusaedit;
   } else {
     url = cnf.arethusaview;
@@ -41,7 +45,7 @@ export const getArethusaUrl = (docId: string, layer: string, user: any) => {
   return `${url}?doc=${docId}&layer=${layer}`;
 };
 
-export default async (doc: any, user: any) => {
+export default async (doc: any, userIsEditor: any) => {
   return `
         <span class="button d-none" style="z-index:2; transform: translate(-50%, 0);left:50%;position:fixed;top:16px" id="collapse-arethusa">Return to normal view</span>
         <section style="text-align: center;margin-bottom:16px;">
@@ -51,6 +55,10 @@ export default async (doc: any, user: any) => {
             <label for="reg-arethusa">Regularized</label>
         </section>
         <div style="text-align:center"><span class="button" id="expand-arethusa">Full screen</span></div>
-        <iframe id="arethusa" src="${getArethusaUrl(doc.id, "orig", user)}"/>
+        <iframe id="arethusa" src="${getArethusaUrl(
+          doc.id,
+          "orig",
+          userIsEditor
+        )}"/>
     `;
 };
