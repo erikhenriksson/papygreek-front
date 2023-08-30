@@ -4,6 +4,7 @@ import {
   buttonDone,
   buttonWait,
   haveEditor,
+  haveAdmin,
   formatTrees,
 } from "../utils.js";
 import { get, post } from "../api.js";
@@ -12,6 +13,7 @@ window.cys = {};
 let menuCache: Array<any> = [];
 
 const userIsEditor = haveEditor();
+const userIsAdmin = haveAdmin();
 
 export const listeners: Listeners = {
   click: [
@@ -332,7 +334,7 @@ export default (params: { [key: string]: string }) => {
         <h3 style="margin-top:10px;">Table of contents</h3>
         <div id="menu">${loader()}</div>
         ${
-          userIsEditor
+          userIsAdmin
             ? `<div style="padding:10px;margin-top:20px;" id="create-release" class="badge-info badge badge-small"><h3 style="margin-bottom:0px;text-align:left;">Publish this version</h3><input style="width:100px;" type="text" id="new-release-version" placeholder="Version n." />
             <span id="publish-release" style="margin-left:3px; margin-top:10px;" class="button-small button button-green">Publish</span>
             </div>`

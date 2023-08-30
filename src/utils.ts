@@ -120,6 +120,11 @@ export const haveEditor = () => {
   return !isEmpty(user) && user.user.level.includes("editor");
 };
 
+export const haveAdmin = () => {
+  const user = getUser();
+  return !isEmpty(user) && user.user.level.includes("admin");
+};
+
 export const setTitle = (t: string) => {
   document.title = `PapyGreek | ${t || ""}`;
 };
