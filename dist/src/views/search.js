@@ -282,8 +282,12 @@ export const listeners = {
                                 return [
                                     `<a data-link-newtab href="/text/${item.text_id}" target="_blank">${item.name}</a>`,
                                     `<span data-sentencen="${item.sentence_n}" data-textid="${item.text_id}" data-layer="${layer}" data-tokenid="${item.id}" class="show-tree button button-plain button-small">${item.sentence_n}-${item.n}</span>`,
-                                    item.orig_form || "",
-                                    item.reg_form || "",
+                                    (item.orig_form || "")
+                                        .replace(/</g, "&lt;")
+                                        .replace(/>/g, "&gt;"),
+                                    (item.reg_form || "")
+                                        .replace(/</g, "&lt;")
+                                        .replace(/>/g, "&gt;"),
                                     (item.rdgs || "")
                                         .replace("$", "")
                                         .split(",")
