@@ -63,8 +63,8 @@ export default (params: Dict<string>) => {
     //document.querySelector('#temp').innerHTML = `python3 run.py try_to_merge ${data.result.name} <br> python3 run.py flag_ignore_and_merge ${data.result.name} ${params.id}`
     setTitle(docCache.name);
     $("#document-meta")!.innerHTML = `${
-      docCache.place_name
-        ? `<span class="badge badge-small badge-yellow">Place: ${docCache.place_name}</span>`
+      docCache.provenance
+        ? `<span class="badge badge-small badge-yellow">Place: ${docCache.provenance}</span>`
         : ""
     } ${
       (docCache.date_not_before || docCache.date_not_after) &&
