@@ -347,7 +347,7 @@ export const listeners: Listeners = {
                   item.reg_relation || "",
                   item.date_not_before || "",
                   item.date_not_after || "",
-                  item.place_name || "",
+                  item.provenance || "",
                   //item.regularization || "",
                 ];
               });
@@ -356,7 +356,7 @@ export const listeners: Listeners = {
               window.datatable.insert({ data: result });
             }
           } else {
-            msg.innerHTML = data;
+            msg.innerHTML = data.detail;
             msg.classList.remove("hidden");
             $("#datebars")?.classList.add("d-none");
           }
