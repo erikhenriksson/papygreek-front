@@ -37,7 +37,7 @@ export const getArethusaUrl = (
   userIsEditor: any
 ) => {
   let url;
-  if (userIsEditor > 1) {
+  if (userIsEditor) {
     url = cnf.arethusaedit;
   } else {
     url = cnf.arethusaview;

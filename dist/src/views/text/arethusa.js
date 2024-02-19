@@ -30,7 +30,7 @@ export const listeners = {
 };
 export const getArethusaUrl = (docId, layer, userIsEditor) => {
     let url;
-    if (userIsEditor > 1) {
+    if (userIsEditor) {
         url = cnf.arethusaedit;
     }
     else {
